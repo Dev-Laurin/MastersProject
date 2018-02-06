@@ -27,6 +27,7 @@
 /** @file Protonect.cpp Main application file. */
 
 #include <iostream>
+<<<<<<< HEAD
 using std::cout; 
 using std::endl; 
 #include <cstdlib>
@@ -34,6 +35,10 @@ using std::endl;
 #include <vector>
 using std::vector; 
 #include "point.cpp"
+=======
+#include <cstdlib>
+#include <signal.h>
+>>>>>>> 0e9732778f94557947bd2bff41c08bbb6f11886e
 
 /// [headers]
 #include <libfreenect2/libfreenect2.hpp>
@@ -369,6 +374,7 @@ int main(int argc, char *argv[])
 /// [registration]
       registration->apply(rgb, depth, &undistorted, &registered);
 
+
       //MARK: Getting Point Data
       //GET RBGD Points from combined Depth & Color image
       vector<vector<Point> > framePoints; 
@@ -388,6 +394,8 @@ int main(int argc, char *argv[])
 
        //cout << framePoints[100][100].rgb << endl; //Printing out x-coordinate of first pixel
      
+=======
+>>>>>>> 0e9732778f94557947bd2bff41c08bbb6f11886e
 /// [registration]
     }
 
@@ -434,4 +442,8 @@ int main(int argc, char *argv[])
   delete registration;
 
   return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 0e9732778f94557947bd2bff41c08bbb6f11886e
