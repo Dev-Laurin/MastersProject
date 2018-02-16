@@ -27,18 +27,13 @@
 /** @file Protonect.cpp Main application file. */
 
 #include <iostream>
-<<<<<<< HEAD
 using std::cout; 
 using std::endl; 
 #include <cstdlib>
 #include <signal.h>
 #include <vector>
 using std::vector; 
-#include "point.cpp"
-=======
-#include <cstdlib>
-#include <signal.h>
->>>>>>> 0e9732778f94557947bd2bff41c08bbb6f11886e
+#include "point.hpp"
 
 /// [headers]
 #include <libfreenect2/libfreenect2.hpp>
@@ -374,28 +369,28 @@ int main(int argc, char *argv[])
 /// [registration]
       registration->apply(rgb, depth, &undistorted, &registered);
 
-
       //MARK: Getting Point Data
       //GET RBGD Points from combined Depth & Color image
-      vector<vector<Point> > framePoints; 
+      vector<Point> framePoints(registered.width*registered.height); 
 
-      for(size_t i=0; i<registered.height; i++){
-        vector<Point> pointLine; 
-
-        for(size_t j=0; j<registered.width; j++){
-          float x,y,z,rgbData; 
-          registration->getPointXYZRGB(&undistorted, &registered, i, j, x, y, z, rgbData);  
-          Point p(x,y,z,rgbData); 
-          pointLine.push_back(p); 
-        }
-        cout << endl; 
-        framePoints.push_back(pointLine);
+      for(size_t j=0; j<registered.width*registered.height; j++){
+        float x,y,z,rgbData; 
+        registration->getPointXYZRGB(&undistorted, &registered, i, j, x, y, z, rgbData);  
+        Point p(x,y,z,rgbData); 
+        framePoints[j] = p; 
       }
+
+      //Find floor 
+      vector<int> plane(4);
+      mt19937 gen(time(0)); 
+      std::uniform_int_distribution<int>dis(0, framePoints.size()-1);
+      findFloorPlane(framePoints, plane, gen, dis); 
+
+      //Draw the Floor plane 
+      
 
        //cout << framePoints[100][100].rgb << endl; //Printing out x-coordinate of first pixel
      
-=======
->>>>>>> 0e9732778f94557947bd2bff41c08bbb6f11886e
 /// [registration]
     }
 
@@ -442,8 +437,4 @@ int main(int argc, char *argv[])
   delete registration;
 
   return 0;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 0e9732778f94557947bd2bff41c08bbb6f11886e

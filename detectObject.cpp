@@ -8,12 +8,118 @@ using std::endl;
 using std::mt19937; 
 #include <vector>
 using std::vector; 
-#include "eigen-git-mirror/Eigen/Eigenvalues"
-#include "point.cpp"
+#include "point.hpp"
+#include <ctime>
 
-using Eigen::MatrixXd;
-using Eigen::EigenSolver;  
-using Eigen::VectorXcd; 
+
+//find the floor plane
+	//RANSAC
+void findFloorPlane(vector<vector<Point > >&  threeD, 
+	vector<float>&plane, mt19937 gen, 
+	std::uniform_int_distribution <int> xDistro,
+	std::uniform_int_distribution<int> yDistro
+	){
+
+	cout << "Plane size: " << plane.size() << endl; 
+
+	//1. Randomly choose a point
+
+	//X
+	int xrandIndex = xDistro(gen); 
+
+	cout << xrandIndex << endl; 
+
+	//Y
+	int yrandIndex = yDistro(gen); 
+
+	cout << "Point chosen: " << endl; 
+	threeD[xrandIndex][yrandIndex].draw(); 
+	//get the pixel grid neighborhood of the point
+	vector<Point> neighbors;
+	neighbors.push_back(threeD[xrandIndex][yrandIndex]); 
+
+	clock_t start; 
+	double duration; 
+	start = clock(); 
+
+	//2nd Random Point 
+	xrandIndex = xDistro(gen);
+	yrandIndex = yDistro(gen);  
+	neighbors.push_back(threeD[xrandIndex][yrandIndex]); 
+
+	//3rd Random Point 
+	xrandIndex = xDistro(gen); 
+	yrandIndex = yDistro(gen); 
+	neighbors.push_back(threeD[xrandIndex][yrandIndex]); 
+
+	//if statements w/neighbors = 4,000ns 
+	//Choosing random points 2,000ns
+	
+	duration = (clock() - start) / (double) CLOCKS_PER_SEC;
+	cout << "Time Difference: " << duration << endl; 
+
+	cout << "Chosen points: " << endl; 
+	for(int i=0; i<neighbors.size(); i++){
+		neighbors[i].draw(); 
+	}
+
+ 
+	//make 2 vectors from the 3 points in neighbors
+	vector<float> AB{neighbors[1].x - neighbors[0].x, 
+		neighbors[1].y - neighbors[0].y, 
+		neighbors[1].z - neighbors[0].z};
+	vector<float> AC{neighbors[2].x - neighbors[0].x, 
+		neighbors[2].y - neighbors[0].y, 
+		neighbors[2].z - neighbors[0].z}; 
+
+	//Get the normal/orthogonal vector using cross product
+	vector<float>normal{AB[1]*AC[2] - AB[2]*AC[1], //i 
+		-(AB[0]*AC[2] - AB[2]*AC[0]), //j 
+		AB[0]*AC[1] - AB[1]*AC[0]}; //k
+
+	//Make the plane out of the normal and one of the points
+	float a = neighbors[0].x; 
+	float b = neighbors[0].y; 
+	float c = neighbors[0].z; 
+	float d = a*normal[0] + b*normal[1] + c*normal[2]; 
+
+	if(normal[0]==0 and normal[1]==0 and normal[2]==0){
+		cout << "The zero vector, next 3 points." << endl;
+		return findFloorPlane(threeD, plane, gen, 
+			xDistro, yDistro); 
+	}
+
+	cout << "Plane equation: " << normal[0] << "x + "; 
+	cout << normal[1] << "y + " << normal[2] << "z = ";
+	cout <<  d << endl;
+	plane[0] = normal[0];
+	plane[1] = normal[1];
+	plane[2] = normal[2]; 
+	plane[3] = d; 
+
+	int pointCount = 0; 
+	//check to see how many points agree with this plane
+	for(int i=0; i<threeD.size(); ++i){
+		for(int j=0; j<threeD[i].size(); ++j){
+			float val = threeD[i][j].x*normal[0] + threeD[i][j].y*normal[1] + threeD[i][j].z*normal[2] - d; 
+			if(val > -1e-5 and val < 1.e-5){
+				//point agrees
+				++pointCount; 
+			}
+			else{
+				cout << "Point: (" << threeD[i][j].x << ", " << threeD[i][j].y; 
+				cout << ", " << threeD[i][j].z << ") Doesn't agree "; 
+				cout << val << endl; 
+
+			}
+
+		}
+
+	}
+	cout << "Point count: " << pointCount << "/" << threeD[0].size()*threeD.size();
+	cout << endl; 
+}
+
 
 int main(){
 
@@ -52,155 +158,17 @@ int main(){
 		threeD[i][0].draw(); 
 	}
 
-	//find the floor plane
-		//RANSAC
-
-	//1. Randomly choose a point
-
-	//X
-	mt19937::result_type seed = time(0); 
-	//auto xrandIndex = std::bind(std::uniform_int_distribution<int>(0,threeD.size()-1),
-	//	mt19937(seed));
-
-//	cout << xrandIndex << endl; 
-
-	//Y
-//	auto yrandIndex = std::bind(std::uniform_int_distribution<int>(0,threeD[0].size()-1),
-//		mt19937(seed)); 
-
-	int xrandIndex = 1; 
-	int yrandIndex = 0; 
-	
-	cout << "Point chosen: " << endl; 
-	threeD[xrandIndex][yrandIndex].draw(); 
-	//get the pixel grid neighborhood of the point
-	vector<Point> neighbors;
-	neighbors.push_back(threeD[xrandIndex][yrandIndex]); 
-
-	//top
-	if(yrandIndex>0){
-		neighbors.push_back(threeD[xrandIndex][yrandIndex-1]);
-	}
-
-	//bottom
-	if(yrandIndex+1<threeD[0].size()){
-		neighbors.push_back(threeD[xrandIndex][yrandIndex+1]);
-	}
-
-	//right
-	if(xrandIndex+1<threeD.size()){
-		neighbors.push_back(threeD[xrandIndex+1][yrandIndex]);
-	}
-
-	//left
-	if(xrandIndex>0){
-		neighbors.push_back(threeD[xrandIndex-1][yrandIndex]);
-	}
-
-	//diagonal upper right
-	if(xrandIndex+1<threeD.size() && yrandIndex>0){
-		neighbors.push_back(threeD[xrandIndex+1][yrandIndex-1]);
-	}
-
-	//diagonal upper left
-	if(xrandIndex>0 && yrandIndex>0){
-		neighbors.push_back(threeD[xrandIndex-1][yrandIndex-1]);
-	}
-
-	//diagonal bottom right
-	if(xrandIndex+1<threeD.size() && yrandIndex+1<threeD[0].size()){
-		neighbors.push_back(threeD[xrandIndex+1][yrandIndex+1]);
-	}
-
-	//diagonal bottom left
-	if(xrandIndex>0 && yrandIndex+1<threeD[0].size()){
-		neighbors.push_back(threeD[xrandIndex-1][yrandIndex+1]);
-	}
-
-	cout << "Chosen points: " << endl; 
-	for(int i=0; i<neighbors.size(); i++){
-		neighbors[i].draw(); 
-	}
- 
-	//Get the eigen values
-	MatrixXd m(3,3); 
-	m(0,0) = neighbors[0].x; 
-	m(0,1) = neighbors[0].y; 
-	m(0,2) = neighbors[0].z; 
-	m(1,0) = neighbors[1].x; 
-	m(1,1) = neighbors[1].y; 
-	m(1,2) = neighbors[1].z; 
-	m(2,0) = neighbors[2].x; 
-	m(2,1) = neighbors[2].y; 
-	m(2,2) = neighbors[2].z; 
-	cout << m << endl; 
+	mt19937 gen(time(0)); 
+	std::uniform_int_distribution<int>xDistro(0, threeD.size()-1);
+	std::uniform_int_distribution<int>yDistro(0, threeD[0].size()-1);
 	
 
+	vector<float>plane(4); 
+	findFloorPlane(threeD, plane, gen, xDistro, yDistro); 
+	cout << "Plane found: " << endl; 
+	for(int i=0; i<plane.size(); ++i){
+		cout << plane[i] << endl; 
+	}
 
-	EigenSolver<MatrixXd> e(m); 
-	VectorXcd eivals = e.eigenvalues(); 
-	cout << "Eigen Values in vector: " << eivals << endl; 
-	//Find the maximum eigenvalue
 	
-	auto maxValue = eivals[0]; 
-	//double Eigen::DenseCoeffsBase<Eigen::Matrix<std::complex<double, -1, 1> maxValue = eivals[0]; 
-	int index = 0; 
-	// for(int i=0; i<eivals.size(); ++i){
-	// 	if(maxValue < eivals[i]){
-	// 		maxValue = eivals[i];
-	// 		index = i;  
-	// 	}
-	// }
-
-	cout << "Max eigen value: " << maxValue << endl; 
-	cout << "Corresponding eigen vector: " << endl; 
-	auto eigenVectors = e.eigenvectors(); 
-	cout << "Eigen vectors: " << endl; 
-	cout << eigenVectors << endl; 
-	cout << "e3: " << endl; 
-	cout << eigenVectors.col(2) << endl; 
-	//ax + by + cz = d 
-	//a = e31
-	auto a = eigenVectors.col(2).row(0); 
-	cout << "a: " <<  a << endl; 
-	//b = e32
-	auto b = eigenVectors.col(2).row(1); 
-	//c = e33 
-	auto c = eigenVectors.col(2).row(2); 
-
-	//Mean vector
-	vector<int> meanVector; 
-	for(int i=0; i<3; i++){
-		int sum = 0; 
-		for(int j=0; j<3; j++){
-			sum+=m(i,j); 
-		} 
-		meanVector.push_back(sum/3); 
-	}
-
-	//d = e31m1 + e32m2 + e33m3 
-	auto d = a*meanVector[0]  + b*meanVector[1] + c*meanVector[2]; 
-	cout << "d: " << d << endl; 
-
-	cout << "Plane equation: " << a << "x" << " + ";  
-	cout << b << "y" << " + " << c << "z" << " = "; 
-	cout << d << endl; 
-
-	//determine if this plane fits most points
-	int numOfPointsInPlane = 0; 
-	for(int i=0; i<threeD.size(); ++i){
-		for(int j=0; j<threeD[i].size(); ++j){
-			//calculate dot product to see if point is in plane
-			auto cal = a*threeD[i][j].x + b*threeD[i][j].y + c*threeD[i][j].z - d; 
-			double threshold = 1.0e-5; 
-			//if((cal) > threshold){
-			//	++numOfPointsInPlane; 
-			
-			//}
-			cout << "Calculate: " << cal << endl; 
-		}
-	}
-
-	cout << "Number of points that agree." << numOfPointsInPlane;
-	cout << endl; 
 }

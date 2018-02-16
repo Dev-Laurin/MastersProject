@@ -10,9 +10,9 @@ public:
 	float z; 
 	float rgb; 
 
-	void draw(){
-		cout << "(" << x << ", " << y << ", " << z << ")" << endl; 
-	}
+	// void draw(){
+	// 	cout << "(" << x << ", " << y << ", " << z << ")" << endl; 
+	// }
 };
 
 #endif /* POINT_H_INCLUDED */ 
