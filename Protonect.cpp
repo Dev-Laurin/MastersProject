@@ -34,6 +34,7 @@ using std::endl;
 #include <vector>
 using std::vector; 
 #include "point.hpp"
+#include "detectObject.hpp"
 
 /// [headers]
 #include <libfreenect2/libfreenect2.hpp>
@@ -367,27 +368,45 @@ int main(int argc, char *argv[])
     if (enable_rgb && enable_depth)
     {
 /// [registration]
-      registration->apply(rgb, depth, &undistorted, &registered);
+      //(RGB frame, Depth Frame, Undistored Depth frame, Color image for depth image, 
+        //enable filter)
+      registration->apply(rgb, depth, &undistorted, &registered, true);
 
       //MARK: Getting Point Data
       //GET RBGD Points from combined Depth & Color image
       vector<Point> framePoints(registered.width*registered.height); 
 
-      for(size_t j=0; j<registered.width*registered.height; j++){
-        float x,y,z,rgbData; 
-        registration->getPointXYZRGB(&undistorted, &registered, i, j, x, y, z, rgbData);  
-        Point p(x,y,z,rgbData); 
-        framePoints[j] = p; 
+      int index = 0; 
+      for(size_t i=0; i<registered.height; ++i){
+        for(size_t j=0; j<registered.width; ++j){
+          float x,y,z,rgbData; 
+
+          //IF color is not needed can use getPointXYZ() for faster
+            //computation 
+          registration->getPointXYZRGB(&undistorted, &registered, i, j, x, y, z, rgbData);  
+          Point p(x,y,z,rgbData); 
+          framePoints[index] = p; 
+          ++index; 
+        }
       }
 
+
       //Find floor 
-      vector<int> plane(4);
-      mt19937 gen(time(0)); 
+      vector<float> plane(4);
+      vector<float> normal(3); 
+      std::mt19937 gen(time(0)); 
+      Point onPlane; 
       std::uniform_int_distribution<int>dis(0, framePoints.size()-1);
-      findFloorPlane(framePoints, plane, gen, dis); 
+      findFloorPlane(framePoints, plane, gen, dis, normal, onPlane); 
 
       //Draw the Floor plane 
-      
+
+      //Segment out the objects based on 3D point depth & Euclidean Distance
+        //to each other
+      vector<vector<int>>objects; 
+      segmentIntoObjects(objects, plane, framePoints, normal, 
+        onPlane);
+
 
        //cout << framePoints[100][100].rgb << endl; //Printing out x-coordinate of first pixel
      
