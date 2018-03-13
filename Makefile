@@ -1,3 +1,3 @@
-all: detectObject.cpp
-	g++ -std=c++17 detectObject.cpp -o detect.o 
+all: testDetectObject.cpp
+	g++ -std=c++17 testDetectObject.cpp -o detect.o 
 	./detect.o
