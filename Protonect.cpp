@@ -35,6 +35,8 @@ using std::endl;
 using std::vector; 
 #include "point.hpp"
 #include "detectObject.hpp"
+#include <fstream> 
+using std::ofstream; 
 
 /// [headers]
 #include <libfreenect2/libfreenect2.hpp>
@@ -116,6 +118,10 @@ public:
 int main(int argc, char *argv[])
 /// [main]
 {
+  //Create JS File for writing 
+//  ofstream jsFile("kinectValues.js"); 
+//  initJSFile(jsFile); 
+  ///
   std::string program_path(argv[0]);
   std::cerr << "Version: " << LIBFREENECT2_VERSION << std::endl;
   std::cerr << "Environment variables: LOGFILE=<protonect.log>" << std::endl;
@@ -390,22 +396,60 @@ int main(int argc, char *argv[])
         }
       }
 
+      //MARK: Filter 
+      //Filter out bad data 
+      vector<Point>filteredPoints(registered.width*registered.height);  
+      filterPoints(framePoints,filteredPoints); 
 
+
+      //MARK: Find Floor Algorithm 
       //Find floor 
       vector<float> plane(4);
       vector<float> normal(3); 
-      std::mt19937 gen(time(0)); 
-      Point onPlane; 
-      std::uniform_int_distribution<int>dis(0, framePoints.size()-1);
-      findFloorPlane(framePoints, plane, gen, dis, normal, onPlane); 
+      // std::mt19937 gen(time(0)); 
+      // Point onPlane; 
+      vector<float> gravityNormalVector({0, -1, 0}); 
+       //3 m? TODO: Change
+      float cameraHeight = 3.0;
+      float xAxisAngleRotation = 20; //degrees 
 
-      //Draw the Floor plane 
+     // std::uniform_int_distribution<int>dis(0, filteredPoints.size()-1);
+     // findFloorPlane(filteredPoints, plane, gen, dis, normal, 
+     //   onPlane, gravityNormalVector, robotSize); 
+  
+      //MARK: Draw Floor 
+      //Draw the Floor plane on the RGB plane
+      //drawFloorPlane(rgb, plane, filteredPoints, normal); 
 
+      //Calculate the floor plane from our knowledge of the kinect's position
+      //https://stackoverflow.com/questions/22234248/how-to-convert-points-between-two-coordinate-systems-with-different-rotations
+      //https://gamedev.stackexchange.com/questions/26084/how-to-get-the-rotation-matrix-to-transform-between-two-3d-cartesian-coordinate
+      //Multiplication Help: http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/#an-introduction-to-matrices
+      getFloorPlane(plane, xAxisAngleRotation, cameraHeight); 
+      
+      //write the plane coordinates to JS file for viewing later
+   //   writePlaneToJS(plane); 
+
+      //Transform points into our 3D space (rotation transform) where
+      //  our camera is level for easy algorithm manipulation of data 
+      transformPoints(filteredPoints, xAxisAngleRotation, cameraHeight); 
+
+
+      //MARK: Segment Into Objects 
+      //place points into bins based on their x & z value
+  //    vector<Point> bins(threeD.size(), Point(-1, -1, -1, -1)); 
+      //keep track of which point is the biggest in the Y 
+  //    vector<Point> maximums(threeD.size(), Point(-1,-1,-1,-1));
       //Segment out the objects based on 3D point depth & Euclidean Distance
         //to each other
+      /*
       vector<vector<int>>objects; 
+      float robotBase = 2.0; //2meters? 
       segmentIntoObjects(objects, plane, framePoints, normal, 
-        onPlane);
+        onPlane, robotBase, maximums, bins);
+ */ 
+      //Save maximums to JS file for viewing later 
+
 
 
        //cout << framePoints[100][100].rgb << endl; //Printing out x-coordinate of first pixel
@@ -452,6 +496,8 @@ int main(int argc, char *argv[])
   dev->stop();
   dev->close();
 /// [stop]
+
+//  endFile(jsFile); 
 
   delete registration;
 

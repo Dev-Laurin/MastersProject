@@ -1,6 +1,9 @@
 
 #ifndef POINT_H_INCLUDED
 #define POINT_H_INCLUDED
+#include <iostream>
+using std::endl; 
+#include <ostream> 
 
 class Point{
 public: 
@@ -16,9 +19,27 @@ public:
 	float z; 
 	float rgb; 
 
-	// void draw(){
-	// 	cout << "(" << x << ", " << y << ", " << z << ")" << endl; 
-	// }
+	void draw(std::ostream & os){
+	 	os << "(" << x << ", " << y << ", " << z << ")" << endl; 
+	}
+/*
+	void changeRGB(uint8_t R, uint8_t G, uint8_t B){
+
+		// How to unpack data: 
+		const uint8_t *p = reinterpret_cast<uint8_t*>(&rgb); 
+		/*
+		uint8_t b = p[0]; 
+		uint8_t g = p[1]; 
+		uint8_t r = p[2]; 
+		
+
+		p[0] = B; 
+		p[1] = G; 
+		p[2] = R; 
+
+		//cast it 
+		rgb = reinterpret_cast<float*>(&p);  
+	} */ 
 };
 
 #endif /* POINT_H_INCLUDED */ 

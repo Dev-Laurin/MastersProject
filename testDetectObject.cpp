@@ -8,14 +8,16 @@ using std::endl;
 using std::mt19937; 
 #include <vector>
 using std::vector; 
-#include "point.hpp"
-#include "detectObject.hpp"
+//include "point.hpp"
+//#include "detectObject.hpp"
+#include "writeToJSFile.hpp"
 //#include <ctime>
 
 //Tells catch to provide a main (one file only)
 #define CATCH_CONFIG_MAIN
 #include "Catch2.hpp" //C++ Testing Framework
 
+/*
 TEST_CASE("Testing findFloorPlane: normal vector != 0", 
 	"Using basic block & floor setup."){
 
@@ -143,4 +145,15 @@ TEST_CASE("Testing findFloorPlane: test if correct floor plane is eventually fou
 
 	REQUIRE(pointsInPlane==6); 
 }
+*/
+TEST_CASE("Testing writing to JS file."){
+	ofstream jsFile("test.js"); 
+	initJSFile(jsFile); 
 
+	//create a fake plane 
+	vector<float> plane = {2, 3, 5}; 
+
+	writePlaneToJS(plane, jsFile); 
+
+	endFile(jsFile); 
+}

@@ -12,16 +12,38 @@ using std::mt19937;
 #include <vector>
 using std::vector; 
 #include "point.hpp"
+#include <cmath> 
+#include <libfreenect2/frame_listener_impl.h>
+
+
+void filterPoints(vector<Point>&points, vector<Point>&
+	filteredPoints){
+
+	int index = 0; 
+	for(size_t i=0; i<points.size(); ++i){
+		if(!(std::isnan(points[i].x)) && !(std::isnan(points[i].y)) && 
+			!(std::isnan(points[i].z))){
+			//Put into filtered
+			filteredPoints[index] = points[i]; 
+			++index; 
+		}
+	}
+	//The real size of the vector
+	filteredPoints.resize(++index); 
+}
+
 
 //find the floor plane
 	//RANSAC
-void findFloorPlane(vector<Point>& threeD, 
+//robotSize: height in meters to Kinect from Floor
+void findFloorPlane(const vector<Point>& threeD, 
 	vector<float>&plane, mt19937 gen, 
 	std::uniform_int_distribution <int> xDistro, 
-	vector<float>&normal, Point&pointOnPlane){
+	vector<float>&normal, Point&pointOnPlane, 
+	const vector<float>&gravityNormal, const float&robotSize){
+
 
 	//1. Randomly choose a point
-
 	//X
 	int xrandIndex = xDistro(gen); 
 
@@ -59,10 +81,52 @@ void findFloorPlane(vector<Point>& threeD,
 	float c = randomPoints[0].z; 
 	float d = a*normal[0] + b*normal[1] + c*normal[2]; 
 
-	if(normal[0]==0 and normal[1]==0 and normal[2]==0){
-		//cout << "The zero vector, next 3 points." << endl;
+	//DOT PRODUCT INFO: 
+	/*	Vectors orthogonal (90 deg) = 0
+		Vectors opposite = -1
+		Range -0.99 to -1 
+	*/
+
+	//If we find the normal vector, or we find that
+		//the normal is not in the up direction, try again
+	//1. angle bet gravity normal & this normal 
+	float dotProduct = gravityNormal[0]*normal[0] +
+	gravityNormal[1]*normal[1] + gravityNormal[2]*normal[2];
+
+	//3. Threshold distance (not shorter than layla)
+	//cosTheta should be < 5 deg or 0.08726646 radians difference 
+
+		//The plane is relatively flat (drivable) and
+			//is not closer to the Kinect than the 
+			//robot's wheels 
+
+		// = Most likely to be floor plane 
+
+
+	//2. # points
+		//This is a bad threshold value due to the possibility
+			//of a cluttered floor -> not implementing 
+
+	if((normal[0]==0 and normal[1]==0 and normal[2]==0)
+		|| (dotProduct < -0.45) || (dotProduct > 0.45)  || //check angle from gravity vector & 
+		plane[1]>=robotSize){ //y axis (height) 
+		
+		//check if it's less than the robot size
+		//Not floor plane, next 3 points.
+	
+	/*	const vector<Point>& threeD, 
+	vector<float>&plane, mt19937 gen, 
+	std::uniform_int_distribution <int> xDistro, 
+	vector<float>&normal, Point&pointOnPlane, 
+	const vector<float>&gravityNormal, const float&robotSize
+	*/
+		cout << "DID not find floor plane." << endl; 
+		cout << "(" << normal[0] << ", " << normal[1] << ", " << 
+		normal[2] << ")" << endl; 
+		cout << "Dot Product: " << dotProduct << " > " << -0.99 << endl; 
+		cout << plane[1] << " >= " << robotSize << endl; 
 		return findFloorPlane(threeD, plane, gen, 
-			xDistro, normal, pointOnPlane); 
+			xDistro, normal, pointOnPlane, gravityNormal, robotSize); 
 	}
 
 	plane[0] = normal[0];
@@ -70,15 +134,78 @@ void findFloorPlane(vector<Point>& threeD,
 	plane[2] = normal[2]; 
 	plane[3] = d; 
 
-	int pointCount = 0; 
-	//check to see how many points agree with this plane
-	for(size_t i=0; i<threeD.size(); ++i){
-		float val = threeD[i].x*normal[0] + threeD[i].y*normal[1] + threeD[i].z*normal[2] - d; 
-		if(val > -1e-5 and val < 1.e-5){
-			//point agrees
-			++pointCount; 
-		}
+	if(std::isnan(normal[0])){
+		cout << " IS NAN " << endl;
+		cout << "AB: < ";  
+		cout << randomPoints[1].x - randomPoints[0].x; 
+		cout << ", " << randomPoints[1].y - randomPoints[0].y;
+		cout << ", " << randomPoints[1].z - randomPoints[0].z;
+		cout << " >" << endl; 
+
+		cout << "AC: < "; 
+		cout << randomPoints[2].x - randomPoints[0].x; 
+		cout << ", " << randomPoints[2].y - randomPoints[0].y;
+		cout << ", " << randomPoints[2].z - randomPoints[0].z; 
+		cout << " >" << endl; 
 	}
+
+	// int pointCount = 0; 
+	// //check to see how many points agree with this plane
+	// for(size_t i=0; i<threeD.size(); ++i){
+	// 	float val = threeD[i].x*normal[0] + threeD[i].y*normal[1] + threeD[i].z*normal[2] - d; 
+	// 	if(val > -1e-5 and val < 1.e-5){
+	// 		//point agrees
+	// 		++pointCount; 
+	// 	}
+	// }
+}
+
+
+//Draws the 3D plane onto the 2D color frame 
+void drawFloorPlane(libfreenect2::Frame * rgb_frame, 
+	const vector<float>&plane, const vector<Point>& framePoints, 
+	vector<float>&normal){
+
+	//Transform plane into 2D pixels
+		//Get all points that match that plane & turn them
+			//into a different color
+	vector<int>indices; 
+	for(size_t i=0; i<framePoints.size(); ++i){
+		float val = framePoints[i].x*normal[0] +
+		 framePoints[i].y*normal[1] + 
+		 framePoints[i].z*normal[2] - plane[3]; 
+	 	if(val > -1e-5 and val < 1.e-5){
+	 		//Point is on plane
+	 		indices.push_back(i); 
+
+	 	}
+	}
+	//Change the color of the rgb frame of those pixels
+		//to draw our plane 
+	//.width, .height, .data (unsigned * char)
+
+	//Test
+	unsigned int black = 0; 
+	// for(int i=0; i<100000; ++i){
+	// 	rgb_frame->data[i] = black; 
+	// }
+	cout << "Plane found: " << endl;
+	cout << plane[0] << "x + " << plane[1] << "y + "; 
+	cout << plane[2] << "z - " << plane[3] << " = 0"; 
+	cout << endl; 
+
+	cout << "Normal: " << endl; 
+	cout << "< " << normal[0] << ", " << normal[1];
+	cout << ", " << normal[2] << " >" << endl;
+
+	cout << "Indices size: " << indices.size() << endl;
+	for(size_t i=0; i<indices.size(); ++i){
+		rgb_frame->data[indices[i]] = black; 
+		////What is this? the data? 
+	}
+
+	//Draw Plane in seperate GL window for representation
+
 }
 
 //Filters out object points that are above floor plane
@@ -130,18 +257,107 @@ void filterIntoObjectPointsOnly(vector<Point>& threeD,
 	}
 }
 
+void transformPoint(Point &point, float &xAxisRotationAngle, float &cameraHeightFromGround){
+	//multiply by the rotation matrix
+	//Y 
+	point.y = point.y * (cos(xAxisRotationAngle) - sin(xAxisRotationAngle));  
+	//Z
+	point.z = point.z * (sin(xAxisRotationAngle) + cos(xAxisRotationAngle)); 
+	
+	//add translation transform to point
+	point.y = point.y - cameraHeightFromGround;
+}
+
+void transformPoints(vector<Point>&filteredPoints, float xAxisRotationAngle, float cameraHeightFromGround){
+
+	vector<double>normal(3); 
+	
+	for(unsigned int i=0; i<filteredPoints.size(); i++){
+		transformPoint(filteredPoints[i], xAxisRotationAngle, cameraHeightFromGround); 
+	}
+}
+
+
+
+void getFloorPlane(vector<float>&plane, float xAxisRotationAngle, float cameraHeightFromGround){
+	//3 points we know are on the plane 
+	Point one(0,0,0,0);
+	Point two(0,0,1,0); 
+	Point three(0,0,2,0);
+
+	transformPoint(one, xAxisRotationAngle, cameraHeightFromGround); 
+	transformPoint(two, xAxisRotationAngle, cameraHeightFromGround); 
+	transformPoint(three, xAxisRotationAngle, cameraHeightFromGround); 
+	
+	//turn 3 points in new coordinate system into plane 
+		//make 2 vectors from the 3 points
+	vector<float> AB{two.x - one.x, 
+		two.y - one.y, 
+		two.z - one.z};
+	vector<float> AC{three.x - one.x, 
+		three.y - one.y, 
+		three.z - one.z}; 
+
+	//Get the normal/orthogonal vector using cross product
+	vector<float>normal(3); 
+	normal[0] = AB[1]*AC[2] - AB[2]*AC[1]; //i 
+	normal[1] = -(AB[0]*AC[2] - AB[2]*AC[0]); //j 
+	normal[2] =	AB[0]*AC[1] - AB[1]*AC[0]; //k
+
+	//Make the plane out of the normal and one of the points
+	float a = two.x; 
+	float b = two.y; 
+	float c = two.z; 
+	float d = a*normal[0] + b*normal[1] + c*normal[2]; 
+
+	plane[0] = a; 
+	plane[1] = b; 
+	plane[2] = c; 
+	plane[3] = d; 
+}
+
 //Found the floor plane, now segment into objects
 	//using depth data & Euclidean Distance
 void segmentIntoObjects(vector<vector<int>> & objects, 
 	vector<float>&plane, vector<Point>& threeD, 
-	vector<float>&normal, Point&onPlane){
+	vector<float>&normal, Point&onPlane, float&robotBase, 
+	vector<Point>&maximums, vector<Point>&bins){
 	//get all the points that are not on or under the plane
+	/* IS THIS NEEDED? IF points are under than it estimates a hole
 	vector<Point> filteredPoints(threeD.size(), Point(-1,-1,-1,-1)); 
 	filterIntoObjectPointsOnly(threeD, plane, filteredPoints,
-		normal, onPlane); 
+		normal, onPlane);
+	*/  
 
 	//Segment the 3D points into objects 
+	//robot base is how big the squares will be 
+	//loop through the points and do a transform based on calculated plane 
+/*	for(int i=0; i<threeD.size(); i++){
 
+		float x = threeD[i].x; 
+
+		//Round the value up to next int 
+		int roundedX = 0; 
+		if(x > 0){
+			roundedX = (int)(x + 1.0);  
+		}
+		else {
+			//round up if negative
+			roundedX = (int)(x - 1.0); 
+		}
+
+		//get the index in the bin 
+		int index = bins.size()/2 - x; 
+
+		//place point into bins 
+		bins[index][threeD[i].z] = threeD[i]; 
+
+		//Check if this point's Y is a new max 
+		if(maximums[index][threeD[i].z].y < threeD[i].y){
+			maximums[index][threeD[i].z] = threeD[i].y; 
+		}
+	}
+*/ 
 }
 
 #endif /* DETECTOBJECT_HPP */ 
