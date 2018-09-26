@@ -318,10 +318,9 @@ void getFloorPlane(vector<float>&plane, float xAxisRotationAngle, float cameraHe
 
 //Found the floor plane, now segment into objects
 	//using depth data & Euclidean Distance
-void segmentIntoObjects(vector<vector<int>> & objects, 
-	vector<float>&plane, vector<Point>& threeD, 
-	vector<float>&normal, Point&onPlane, float&robotBase, 
-	vector<Point>&maximums, vector<Point>&bins){
+void segmentIntoObjects(vector<Point>& threeD, 
+	float&robotBase, vector<vector<Point>>&maximums, 
+	vector<vector<Point>>&bins){
 	//get all the points that are not on or under the plane
 	/* IS THIS NEEDED? IF points are under than it estimates a hole
 	vector<Point> filteredPoints(threeD.size(), Point(-1,-1,-1,-1)); 
@@ -332,7 +331,7 @@ void segmentIntoObjects(vector<vector<int>> & objects,
 	//Segment the 3D points into objects 
 	//robot base is how big the squares will be 
 	//loop through the points and do a transform based on calculated plane 
-/*	for(int i=0; i<threeD.size(); i++){
+	for(unsigned int i=0; i<threeD.size(); i++){
 
 		float x = threeD[i].x; 
 
@@ -347,17 +346,18 @@ void segmentIntoObjects(vector<vector<int>> & objects,
 		}
 
 		//get the index in the bin 
-		int index = bins.size()/2 - x; 
+		int index = bins.size()/2 - roundedX; 
 
 		//place point into bins 
-		bins[index][threeD[i].z] = threeD[i]; 
+		int z = ((int)threeD[i].z); 
+		bins[index][z] = threeD[i]; 
 
 		//Check if this point's Y is a new max 
-		if(maximums[index][threeD[i].z].y < threeD[i].y){
-			maximums[index][threeD[i].z] = threeD[i].y; 
+		if(maximums[index][z].y < threeD[i].y){
+			maximums[index][z] = threeD[i]; 
 		}
 	}
-*/ 
+
 }
 
 #endif /* DETECTOBJECT_HPP */ 

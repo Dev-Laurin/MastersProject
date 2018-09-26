@@ -425,6 +425,7 @@ int main(int argc, char *argv[])
       //https://stackoverflow.com/questions/22234248/how-to-convert-points-between-two-coordinate-systems-with-different-rotations
       //https://gamedev.stackexchange.com/questions/26084/how-to-get-the-rotation-matrix-to-transform-between-two-3d-cartesian-coordinate
       //Multiplication Help: http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/#an-introduction-to-matrices
+      //https://math.stackexchange.com/questions/72014/given-an-angle-in-radians-how-could-i-calculate-a-4x4-rotation-matrix-about-the
       getFloorPlane(plane, xAxisAngleRotation, cameraHeight); 
       
       //write the plane coordinates to JS file for viewing later
@@ -437,17 +438,18 @@ int main(int argc, char *argv[])
 
       //MARK: Segment Into Objects 
       //place points into bins based on their x & z value
-  //    vector<Point> bins(threeD.size(), Point(-1, -1, -1, -1)); 
+      vector<vector<Point>> bins(filteredPoints.size()/2,
+      vector<Point>(filteredPoints.size()/2 , Point(-1, -1, -1, -1))); 
       //keep track of which point is the biggest in the Y 
-  //    vector<Point> maximums(threeD.size(), Point(-1,-1,-1,-1));
+      vector<vector<Point>> maximums(filteredPoints.size()/2, 
+        vector<Point>(filteredPoints.size()/2, Point(-1,-1,-1,-1)));
       //Segment out the objects based on 3D point depth & Euclidean Distance
         //to each other
-      /*
       vector<vector<int>>objects; 
       float robotBase = 2.0; //2meters? 
-      segmentIntoObjects(objects, plane, framePoints, normal, 
-        onPlane, robotBase, maximums, bins);
- */ 
+      segmentIntoObjects(filteredPoints, robotBase, 
+        maximums, bins);
+  
       //Save maximums to JS file for viewing later 
 
 
