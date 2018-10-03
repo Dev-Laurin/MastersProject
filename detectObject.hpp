@@ -13,7 +13,7 @@ using std::mt19937;
 using std::vector; 
 #include "point.hpp"
 #include <cmath> 
-#include <libfreenect2/frame_listener_impl.h>
+//#include <libfreenect2/frame_listener_impl.h>
 
 
 void filterPoints(vector<Point>&points, vector<Point>&
@@ -160,7 +160,7 @@ void findFloorPlane(const vector<Point>& threeD,
 	// }
 }
 
-
+/*
 //Draws the 3D plane onto the 2D color frame 
 void drawFloorPlane(libfreenect2::Frame * rgb_frame, 
 	const vector<float>&plane, const vector<Point>& framePoints, 
@@ -206,7 +206,7 @@ void drawFloorPlane(libfreenect2::Frame * rgb_frame,
 
 	//Draw Plane in seperate GL window for representation
 
-}
+} */ 
 
 //Filters out object points that are above floor plane
 void filterIntoObjectPointsOnly(vector<Point>& threeD,
@@ -346,16 +346,27 @@ void segmentIntoObjects(vector<Point>& threeD,
 		}
 
 		//get the index in the bin 
-		int index = bins.size()/2 - roundedX; 
+		//shift values to the right for array index
+		int index = bins.size()/2 + roundedX;
+		if(index < 0){
+			//error!! 
+			 // cout << "Error, negative index: "; 
+			 // cout << index << " For X: "; 
+			 // cout << roundedX << endl;
+			
+		} 
+		else{
+			//place point into bins 
+			int z = ((int)threeD[i].z); 
+			bins[index][z] = threeD[i]; 
 
-		//place point into bins 
-		int z = ((int)threeD[i].z); 
-		bins[index][z] = threeD[i]; 
-
-		//Check if this point's Y is a new max 
-		if(maximums[index][z].y < threeD[i].y){
-			maximums[index][z] = threeD[i]; 
+			//Check if this point's Y is a new max 
+			if(maximums[index][z].y < threeD[i].y){
+				maximums[index][z] = threeD[i]; 
+			}
 		}
+
+		
 	}
 
 }

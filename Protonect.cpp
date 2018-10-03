@@ -36,6 +36,7 @@ using std::vector;
 #include "point.hpp"
 #include "detectObject.hpp"
 #include <fstream> 
+#include "writeToJSFile.hpp"
 using std::ofstream; 
 
 /// [headers]
@@ -119,8 +120,14 @@ int main(int argc, char *argv[])
 /// [main]
 {
   //Create JS File for writing 
-//  ofstream jsFile("kinectValues.js"); 
-//  initJSFile(jsFile); 
+ ofstream jsFile("data.js"); 
+ initJSFile(jsFile, "grid"); 
+ int width = 10; //meters 
+ vector<vector<Point>> bins(width,
+      vector<Point>(width , Point(-1, -1, -1, -1))); 
+      //keep track of which point is the biggest in the Y 
+      vector<vector<Point>> maximums(width, 
+        vector<Point>(width, Point(-1,-1,-1,-1)));
   ///
   std::string program_path(argv[0]);
   std::cerr << "Version: " << LIBFREENECT2_VERSION << std::endl;
@@ -398,8 +405,8 @@ int main(int argc, char *argv[])
 
       //MARK: Filter 
       //Filter out bad data 
-      vector<Point>filteredPoints(registered.width*registered.height);  
-      filterPoints(framePoints,filteredPoints); 
+    //  vector<Point>filteredPoints(registered.width*registered.height);  
+   //   filterPoints(framePoints,filteredPoints); 
 
 
       //MARK: Find Floor Algorithm 
@@ -429,29 +436,24 @@ int main(int argc, char *argv[])
       getFloorPlane(plane, xAxisAngleRotation, cameraHeight); 
       
       //write the plane coordinates to JS file for viewing later
-   //   writePlaneToJS(plane); 
+    //  writePlaneToJS(plane); 
 
       //Transform points into our 3D space (rotation transform) where
       //  our camera is level for easy algorithm manipulation of data 
-      transformPoints(filteredPoints, xAxisAngleRotation, cameraHeight); 
+      transformPoints(framePoints, xAxisAngleRotation, cameraHeight); 
 
 
       //MARK: Segment Into Objects 
       //place points into bins based on their x & z value
-      vector<vector<Point>> bins(filteredPoints.size()/2,
-      vector<Point>(filteredPoints.size()/2 , Point(-1, -1, -1, -1))); 
-      //keep track of which point is the biggest in the Y 
-      vector<vector<Point>> maximums(filteredPoints.size()/2, 
-        vector<Point>(filteredPoints.size()/2, Point(-1,-1,-1,-1)));
+      
       //Segment out the objects based on 3D point depth & Euclidean Distance
-        //to each other
-      vector<vector<int>>objects; 
+        //to each other 
       float robotBase = 2.0; //2meters? 
-      segmentIntoObjects(filteredPoints, robotBase, 
+      segmentIntoObjects(framePoints, robotBase, 
         maximums, bins);
   
       //Save maximums to JS file for viewing later 
-
+      writeToJS(maximums, jsFile); 
 
 
        //cout << framePoints[100][100].rgb << endl; //Printing out x-coordinate of first pixel
@@ -498,8 +500,9 @@ int main(int argc, char *argv[])
   dev->stop();
   dev->close();
 /// [stop]
-
-//  endFile(jsFile); 
+  endWritingPoints(jsFile); 
+  writeVariable(jsFile, width, width); 
+  jsFile.close(); 
 
   delete registration;
 

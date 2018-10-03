@@ -5,7 +5,7 @@
 
 //GLOBALS 
 //Set the scene size. 
-const WIDTH = 400; 
+const WIDTH = 800; 
 const HEIGHT = 300; 
 
 //Set some camera attributes. 
@@ -37,12 +37,16 @@ var material = new THREE.MeshBasicMaterial( {
 }); 
 var plane = new THREE.Plane(new THREE.Vector3(1, 1, 0.2), 3);
 var helper = new THREE.PlaneHelper(plane, 100, 0xffff00); 
-scene.add(helper);   
+//scene.add(helper);   
 
 var i = 0; 
 var frame = 0; 
 
 var text = document.getElementById('text'); 
+
+//2D Ground Grid 
+var groundGridSize = 200; 
+var groundDivisions = 10; 
 
 init();
 
@@ -61,15 +65,24 @@ function init(){
 
 	//add the ground plane wireframe
 	/////////////////////////
-	var grid = new THREE.GridHelper(200, 10); 
-	grid.setColors(0xffffff, 0xffffff);
-	scene.add(grid);  
+	var wireframe = new THREE.GridHelper(groundGridSize, 
+		groundDivisions, 0xffffff, 0xffffff); 
+	scene.add(wireframe);  
 	/////////////////////
 
-	camera.position.z = 150;
-	camera.position.y = 20; 
-	camera.rotation.x = 0;
+//Preferred Camera position
 
+	camera.position.z = 110;
+	camera.position.y = 70; 
+
+	camera.rotation.x = 6; 
+
+/*
+		camera.position.z = 0;
+	camera.position.y = 150; 
+
+	camera.rotation.x = 5;
+*/  
 	//create a point light 
 	const pointLight = new THREE.PointLight(0xFFFFFF); 
 
@@ -81,15 +94,72 @@ function init(){
 	//add to the scene
 	scene.add(pointLight); 
 
+	drawBins(); 
+
 	//schedule the first frame 
 	requestAnimationFrame(update); 
 
-	text.innerText = "Plane: ( , , )"
+	text.innerText = "Environment" //"Plane: ( , , )"
+
 } 
 
+function drawBins(){
+	//grid is our variable with our data 
+	
+	var groundSquareSize = groundGridSize/groundDivisions - 0.5; //account for lines 
+	console.log(groundSquareSize)
+	for(var x=0; x<grid.length; x++){
+		//The X bin position from left to right in view range 
+		var realXBinCoord = x - viewWidth/2; 
+
+		for(var z=0; z<grid[x].length; z++){
+			//The Z bin from 0 forward 
+
+			if(grid[x][z].y != 0){
+				//Cube model 
+				var geometry = new THREE.BoxGeometry(groundSquareSize, 
+					grid[x][z].y * groundSquareSize, groundSquareSize);
+				var material = new THREE.MeshBasicMaterial({color: 0x00ff00}); 
+				var cube = new THREE.Mesh(geometry, material);
+				cube.material.opacity = 0.25; 
+				cube.material.transparent = true;
+
+				//Wireframe of cube  
+				var wireframe = new THREE.WireframeHelper(cube, 0x00ff00); 
+
+				//Position of cube 
+				cube.position.x = realXBinCoord * groundSquareSize - 
+				groundSquareSize/2; // + offsetFromGrid; 
+				cube.position.y = (grid[x][z].y * groundSquareSize)/2; 
+				cube.position.z =  z * (-groundSquareSize/2); //+ offsetFromGrid; 
+
+				//Position of wireframe 
+				wireframe.position.x = realXBinCoord * groundSquareSize - 
+				groundSquareSize/2; // + offsetFromGrid; 
+				wireframe.position.y = (grid[x][z].y * groundSquareSize)/2; 
+				wireframe.position.z =  z * (-groundSquareSize/2); // + offsetFromGrid; 
+
+				scene.add(cube); 
+				scene.add(wireframe); 
+
+				console.log("X coord: ")
+				console.log(realXBinCoord)
+				console.log("Z coord: ")
+				console.log(z)
+		
+			}
+		}
+		
+	}
+	
+}
+
+//TODO
+//Rotating camera functionality
+//https://stackoverflow.com/questions/8426822/rotate-camera-in-three-js-with-mouse
 function update() {
 	 
-	
+	/*
 	//every _ frame, change the plane so the user can see
 	if(frame % 120 == 0){
 		//change plane to new value 
@@ -98,7 +168,7 @@ function update() {
 		plane.position.x = newPlane.x;  
 		plane.position.y = newPlane.y; 
 		plane.position.z = newPlane.z; 
-		*/ 
+		
 		var vectorThree = new THREE.Vector3(newPlane.x, newPlane.y,
 		newPlane.z); 
 		plane.normal = vectorThree;
@@ -113,7 +183,9 @@ function update() {
 		if(planes.length <= i){
 			i = 0; 
 		}
-	}
+	} */ 
+
+
 	 
 	//Draw
 	renderer.render(scene, camera); 

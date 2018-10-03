@@ -8,8 +8,8 @@ using std::endl;
 using std::mt19937; 
 #include <vector>
 using std::vector; 
-//include "point.hpp"
-//#include "detectObject.hpp"
+#include "point.hpp"
+#include "detectObject.hpp"
 #include "writeToJSFile.hpp"
 //#include <ctime>
 
@@ -147,8 +147,9 @@ TEST_CASE("Testing findFloorPlane: test if correct floor plane is eventually fou
 }
 */
 TEST_CASE("Testing writing to JS file."){
+	/*
 	ofstream jsFile("test.js"); 
-	initJSFile(jsFile); 
+	initJSFile(jsFile, "plane"); 
 
 	//create a fake plane 
 	vector<float> plane = {2, 3, 5}; 
@@ -156,4 +157,84 @@ TEST_CASE("Testing writing to JS file."){
 	writePlaneToJS(plane, jsFile); 
 
 	endFile(jsFile); 
+	*/ 
+}
+
+TEST_CASE("PlacePointsIntoBins"){
+	vector<Point> points(1000, Point(1,1,1,1)); 
+	float roboBase = 1; //meter 
+	int width = 10; 
+	vector<vector<Point>> max(width, 
+        vector<Point>(width, Point(0,0,0,0)));
+	vector<vector<Point>> bins(width,
+      vector<Point>(width , Point(0, 0, 0, 0))); 
+	segmentIntoObjects(points, roboBase, max, bins); 
+
+	//max height should be 1 
+	//cout << max[7][1].y << endl; 
+	REQUIRE(max[7][1].y == 1); 
+
+	REQUIRE(max.size() == width); 
+	//cout << "size of max: " << max.size() << endl; 
+
+
+	ofstream file("test.js"); 
+	initJSFile(file, "grid");
+
+	writeToJS(max, file); 
+
+	endWritingPoints(file);
+	writeVariable(file, width, width);  
+
+}
+
+
+TEST_CASE("PlacePointsIntoBins Different Points"){
+	vector<Point> points(1000, Point(1,1,1,1)); 
+	//Change half the points
+	for(int i=points.size()/2; i<points.size(); i++){
+		points[i] = Point(-2, 3, 3, 1); 
+	}
+
+	float roboBase = 1; //meter 
+	int width = 10; 
+	vector<vector<Point>> max(width, 
+        vector<Point>(width, Point(0,0,0,0)));
+	vector<vector<Point>> bins(width,
+      vector<Point>(width , Point(0, 0, 0, 0))); 
+	segmentIntoObjects(points, roboBase, max, bins); 
+
+	//max height should be 1 
+	REQUIRE(max[7][1].y == 1); //Note: If this fails, rest of code won't run
+	//max height should be 3 
+	REQUIRE(max[2][3].y == 3); 
+	cout << endl; 
+	cout << "max size, part 2 : " << endl; 
+	cout << max.size() << endl; 
+
+	ofstream o("output.txt");
+
+
+	for(int i=0; i<max.size(); i++){
+		for(int j=0; j<max[i].size(); j++){
+			o << "max[i][j]: "; 
+			o << max[i][j].x << ", " << max[i][j].y; 
+			o << ", " << max[i][j].z << ")" << endl; 
+
+		}
+	}
+
+	o.close(); 
+
+	//write data to file 
+	ofstream file("test.js"); 
+	initJSFile(file, "grid");
+
+	writeToJS(max, file); 
+
+	endWritingPoints(file);
+	writeVariable(file, width, width);  
+
+	file.close(); 
+
 }
