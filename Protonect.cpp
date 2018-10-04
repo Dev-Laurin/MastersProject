@@ -124,10 +124,10 @@ int main(int argc, char *argv[])
  initJSFile(jsFile, "grid"); 
  int width = 10; //meters 
  vector<vector<Point>> bins(width,
-      vector<Point>(width , Point(-1, -1, -1, -1))); 
+      vector<Point>(width , Point(0, 0, 0, 0))); 
       //keep track of which point is the biggest in the Y 
       vector<vector<Point>> maximums(width, 
-        vector<Point>(width, Point(-1,-1,-1,-1)));
+        vector<Point>(width, Point(0,0,0,0)));
   ///
   std::string program_path(argv[0]);
   std::cerr << "Version: " << LIBFREENECT2_VERSION << std::endl;
@@ -455,6 +455,16 @@ int main(int argc, char *argv[])
       //Save maximums to JS file for viewing later 
       writeToJS(maximums, jsFile); 
 
+      /*
+        //raw data from kinect 
+      ofstream rawKinectDataFile("raw.js"); 
+
+      for(unsigned int i=0; i<framePoints.size(); i++){
+        rawKinectDataFile << "(" << framePoints[i].x << ", "; 
+        rawKinectDataFile << framePoints[i].y << ", "; 
+        rawKinectDataFile << framePoints[i].z << ")" << endl; 
+      }
+      */ 
 
        //cout << framePoints[100][100].rgb << endl; //Printing out x-coordinate of first pixel
      
@@ -503,6 +513,8 @@ int main(int argc, char *argv[])
   endWritingPoints(jsFile); 
   writeVariable(jsFile, width, width); 
   jsFile.close(); 
+
+  //rawKinectDataFile.close(); 
 
   delete registration;
 

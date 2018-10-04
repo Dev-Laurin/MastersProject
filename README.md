@@ -14,4 +14,9 @@ Algorithm: I plan to use RANSAC, picking 3 random points from the 3D Point Cloud
   is evaluated by how many points are in said plane (floor points > other points to work). All other points are considered
   for segmentation into objects. The segmentation process involves using depth data to calculate the distance from other 
   points to determine if they are in the same object. 
-  
+ 
+
+Citations: 
+https://github.com/OpenKinect/libfreenect2 
+DOI 10.5281/zenodo.50641
+

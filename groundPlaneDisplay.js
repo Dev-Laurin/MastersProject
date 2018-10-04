@@ -105,9 +105,10 @@ function init(){
 
 function drawBins(){
 	//grid is our variable with our data 
-	
+
 	var groundSquareSize = groundGridSize/groundDivisions - 0.5; //account for lines 
 	console.log(groundSquareSize)
+
 	for(var x=0; x<grid.length; x++){
 		//The X bin position from left to right in view range 
 		var realXBinCoord = x - viewWidth/2; 
@@ -146,6 +147,8 @@ function drawBins(){
 				console.log(realXBinCoord)
 				console.log("Z coord: ")
 				console.log(z)
+				console.log("grid len: ")
+	console.log(grid.length)
 		
 			}
 		}

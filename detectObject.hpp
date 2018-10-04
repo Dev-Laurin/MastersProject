@@ -13,6 +13,8 @@ using std::mt19937;
 using std::vector; 
 #include "point.hpp"
 #include <cmath> 
+#include <fstream> 
+using std::ofstream; 
 //#include <libfreenect2/frame_listener_impl.h>
 
 
@@ -327,7 +329,7 @@ void segmentIntoObjects(vector<Point>& threeD,
 	filterIntoObjectPointsOnly(threeD, plane, filteredPoints,
 		normal, onPlane);
 	*/  
-
+	ofstream file("maximumsTest.txt"); 
 	//Segment the 3D points into objects 
 	//robot base is how big the squares will be 
 	//loop through the points and do a transform based on calculated plane 
@@ -361,14 +363,19 @@ void segmentIntoObjects(vector<Point>& threeD,
 			bins[index][z] = threeD[i]; 
 
 			//Check if this point's Y is a new max 
+			file << maximums[index][z].y << " < "; 
+			file << threeD[i].y << endl; 
 			if(maximums[index][z].y < threeD[i].y){
 				maximums[index][z] = threeD[i]; 
+			}
+			else if(maximums[index][z].y == 0){
+				maximums[index][z] = threeD[i];
 			}
 		}
 
 		
 	}
-
+	file.close(); 
 }
 
 #endif /* DETECTOBJECT_HPP */ 
