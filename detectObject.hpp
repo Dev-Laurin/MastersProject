@@ -13,6 +13,7 @@ using std::mt19937;
 using std::vector; 
 #include "point.hpp"
 #include <cmath> 
+#include <math.h> /* isnan */ 
 #include <fstream> 
 using std::ofstream; 
 //#include <libfreenect2/frame_listener_impl.h>
@@ -261,10 +262,16 @@ void filterIntoObjectPointsOnly(vector<Point>& threeD,
 
 void transformPoint(Point &point, float &xAxisRotationAngle, float &cameraHeightFromGround){
 	//multiply by the rotation matrix
-	//Y 
-	point.y = point.y * (cos(xAxisRotationAngle) - sin(xAxisRotationAngle));  
-	//Z
-	point.z = point.z * (sin(xAxisRotationAngle) + cos(xAxisRotationAngle)); 
+
+	if(xAxisRotationAngle != 0){
+		//save for math correctness 
+		Point kinect = point; 
+		//Y 
+		point.y = (kinect.y * cos(xAxisRotationAngle)) - (sin(xAxisRotationAngle) * kinect.z);  
+		//Z
+		point.z = kinect.y * (sin(xAxisRotationAngle) + kinect.z * cos(xAxisRotationAngle)); 
+		
+	}
 	
 	//add translation transform to point
 	point.y = point.y - cameraHeightFromGround;
@@ -280,6 +287,17 @@ void transformPoints(vector<Point>&filteredPoints, float xAxisRotationAngle, flo
 }
 
 
+int roundToNextInt(double & x){
+	int roundedX = 0; 
+	if(x > 0){
+		roundedX = (int)(x + 1.0);  
+	}
+	else {
+		//round up if negative
+		roundedX = (int)(x - 1.0); 
+	}
+	return roundedX; 
+}
 
 void getFloorPlane(vector<float>&plane, float xAxisRotationAngle, float cameraHeightFromGround){
 	//3 points we know are on the plane 
@@ -329,42 +347,39 @@ void segmentIntoObjects(vector<Point>& threeD,
 	filterIntoObjectPointsOnly(threeD, plane, filteredPoints,
 		normal, onPlane);
 	*/  
-	ofstream file("maximumsTest.txt"); 
+
 	//Segment the 3D points into objects 
 	//robot base is how big the squares will be 
 	//loop through the points and do a transform based on calculated plane 
 	for(unsigned int i=0; i<threeD.size(); i++){
 
-		float x = threeD[i].x; 
+		if(std::isnan(threeD[i].x) || std::isnan(threeD[i].y) || 
+			std::isnan(threeD[i].z)){
+			continue; //next loop iteration 
+		}
+
+		double x = threeD[i].x; 
 
 		//Round the value up to next int 
-		int roundedX = 0; 
-		if(x > 0){
-			roundedX = (int)(x + 1.0);  
-		}
-		else {
-			//round up if negative
-			roundedX = (int)(x - 1.0); 
-		}
+		int roundedX = roundToNextInt(x); 
 
 		//get the index in the bin 
 		//shift values to the right for array index
 		int index = bins.size()/2 + roundedX;
 		if(index < 0){
 			//error!! 
-			 // cout << "Error, negative index: "; 
-			 // cout << index << " For X: "; 
-			 // cout << roundedX << endl;
+			 cout << "Error, negative index: "; 
+			 cout << index << " For X: "; 
+			 cout << roundedX << endl;
 			
 		} 
 		else{
+
 			//place point into bins 
-			int z = ((int)threeD[i].z); 
+			int z = ((int)threeD[i].z);  
 			bins[index][z] = threeD[i]; 
 
 			//Check if this point's Y is a new max 
-			file << maximums[index][z].y << " < "; 
-			file << threeD[i].y << endl; 
 			if(maximums[index][z].y < threeD[i].y){
 				maximums[index][z] = threeD[i]; 
 			}
@@ -375,7 +390,9 @@ void segmentIntoObjects(vector<Point>& threeD,
 
 		
 	}
-	file.close(); 
+
 }
+
+
 
 #endif /* DETECTOBJECT_HPP */ 

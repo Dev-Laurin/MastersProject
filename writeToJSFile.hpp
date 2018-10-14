@@ -25,6 +25,8 @@ void initJSFile(ofstream & file, string variableName){
 //write to the JS file 
 void writeToJS(vector<vector<Point>>points, ofstream & file){
 
+	file << "//points.length = " << points.size() << endl; 
+	file << "//points[j].length = " << points[0].size() << endl; 
 	for(unsigned int i=0; i<points.size(); i++){
 		file << " [ "; 
 		for(unsigned int j=0; j<points[i].size(); j++){

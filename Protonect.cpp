@@ -120,14 +120,15 @@ int main(int argc, char *argv[])
 /// [main]
 {
   //Create JS File for writing 
- ofstream jsFile("data.js"); 
- initJSFile(jsFile, "grid"); 
+ 
+  
  int width = 10; //meters 
  vector<vector<Point>> bins(width,
       vector<Point>(width , Point(0, 0, 0, 0))); 
-      //keep track of which point is the biggest in the Y 
-      vector<vector<Point>> maximums(width, 
+  //keep track of which point is the biggest in the Y 
+  vector<vector<Point>> maximums(width, 
         vector<Point>(width, Point(0,0,0,0)));
+
   ///
   std::string program_path(argv[0]);
   std::cerr << "Version: " << LIBFREENECT2_VERSION << std::endl;
@@ -408,6 +409,13 @@ int main(int argc, char *argv[])
     //  vector<Point>filteredPoints(registered.width*registered.height);  
    //   filterPoints(framePoints,filteredPoints); 
 
+      ofstream debugFile("debug.txt"); 
+
+/*
+      for(int i=0; i<framePoints.size(); i++){
+        framePoints[i].draw(debugFile); 
+        debugFile << endl; 
+      } */ 
 
       //MARK: Find Floor Algorithm 
       //Find floor 
@@ -417,8 +425,8 @@ int main(int argc, char *argv[])
       // Point onPlane; 
       vector<float> gravityNormalVector({0, -1, 0}); 
        //3 m? TODO: Change
-      float cameraHeight = 3.0;
-      float xAxisAngleRotation = 20; //degrees 
+      float cameraHeight = 0.0; // 3.0;
+      float xAxisAngleRotation = 0; // 20; //degrees 
 
      // std::uniform_int_distribution<int>dis(0, filteredPoints.size()-1);
      // findFloorPlane(filteredPoints, plane, gen, dis, normal, 
@@ -440,7 +448,12 @@ int main(int argc, char *argv[])
 
       //Transform points into our 3D space (rotation transform) where
       //  our camera is level for easy algorithm manipulation of data 
-      transformPoints(framePoints, xAxisAngleRotation, cameraHeight); 
+  /*    transformPoints(framePoints, xAxisAngleRotation, cameraHeight); 
+debugFile << "After Transform: " << endl; 
+for(int i=0; i<framePoints.size(); i++){
+        framePoints[i].draw(debugFile); 
+        debugFile << endl; 
+      } */ 
 
 
       //MARK: Segment Into Objects 
@@ -448,13 +461,20 @@ int main(int argc, char *argv[])
       
       //Segment out the objects based on 3D point depth & Euclidean Distance
         //to each other 
-      float robotBase = 2.0; //2meters? 
+      float robotBase = 1.0; //2meters? 
       segmentIntoObjects(framePoints, robotBase, 
         maximums, bins);
   
       //Save maximums to JS file for viewing later 
+      ofstream jsFile("data.js"); 
+      initJSFile(jsFile, "grid");
       writeToJS(maximums, jsFile); 
 
+      endWritingPoints(jsFile); 
+      writeVariable(jsFile, width, width);
+
+      jsFile.close(); 
+      debugFile.close(); 
       /*
         //raw data from kinect 
       ofstream rawKinectDataFile("raw.js"); 
@@ -510,9 +530,10 @@ int main(int argc, char *argv[])
   dev->stop();
   dev->close();
 /// [stop]
-  endWritingPoints(jsFile); 
-  writeVariable(jsFile, width, width); 
-  jsFile.close(); 
+   
+  
+
+  
 
   //rawKinectDataFile.close(); 
 

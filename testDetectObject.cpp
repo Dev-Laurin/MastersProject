@@ -217,7 +217,7 @@ TEST_CASE("PlacePointsIntoBins Different Points"){
 
 	for(int i=0; i<max.size(); i++){
 		for(int j=0; j<max[i].size(); j++){
-			o << "max[i][j]: "; 
+			o << "max[" << i << "][" << j << "]: "; 
 			o << max[i][j].x << ", " << max[i][j].y; 
 			o << ", " << max[i][j].z << ")" << endl; 
 
@@ -236,5 +236,98 @@ TEST_CASE("PlacePointsIntoBins Different Points"){
 	writeVariable(file, width, width);  
 
 	file.close(); 
+
+}
+
+TEST_CASE("Test segmentIntoObjects with real data (static)"){
+	vector<Point> points = {Point( 1.01761, -2.58591, 1.98454, 0 ), 
+		Point( 2.25616, -3.17233, 4.32981, 0), Point(0.469131, -2.78297, 0.999927, 0), 
+		Point(1.09255, -2.55152, 2.09672, 0 )
+	}; 
+	//Change half the points
+	for(int i=points.size()/2; i<points.size(); i++){
+		points[i] = Point(-2, 3, 3, 1); 
+	}
+
+	float roboBase = 1; //meter 
+	int width = 10; 
+	vector<vector<Point>> max(width, 
+        vector<Point>(width, Point(0,0,0,0)));
+	vector<vector<Point>> bins(width,
+      vector<Point>(width , Point(0, 0, 0, 0))); 
+	segmentIntoObjects(points, roboBase, max, bins); 
+
+	 
+	REQUIRE(max[5][2].y > -2.58); //Note: If this fails, rest of code won't run
+	
+	cout << endl; 
+	cout << "max size, part 2 : " << endl; 
+	cout << max.size() << endl; 
+
+	ofstream o("output.txt");
+
+
+	for(int i=0; i<max.size(); i++){
+		for(int j=0; j<max[i].size(); j++){
+			o << "max[" << i << "][" << j << "]: "; 
+			o << max[i][j].x << ", " << max[i][j].y; 
+			o << ", " << max[i][j].z << ")" << endl; 
+
+		}
+	}
+
+	o.close(); 
+
+	//write data to file 
+	ofstream file("test.js"); 
+	initJSFile(file, "grid");
+
+	writeToJS(max, file); 
+
+	endWritingPoints(file);
+	writeVariable(file, width, width);  
+
+	file.close(); 
+}
+
+TEST_CASE("Test segmentIntoObjects from recorded real data. (bins)"){
+	vector<Point> points = {Point( 1.01761, -2.58591, 1.98454, 0 ), 
+		Point( 2.25616, -3.17233, 4.32981, 0), Point(0.469131, -2.78297, 0.999927, 0), 
+		Point(1.09255, -2.55152, 2.09672, 0 )
+	}; 
+
+	float roboBase = 1; //meter 
+	int width = 10; 
+	vector<vector<Point>> max(width, 
+        vector<Point>(width, Point(0,0,0,0)));
+	vector<vector<Point>> bins(width,
+      vector<Point>(width , Point(0, 0, 0, 0))); 
+	segmentIntoObjects(points, roboBase, max, bins); 
+
+	//check that points went into the correct bins 
+	REQUIRE(max[7][1].y > -2.58);  
+	REQUIRE(max[1][0].y < -2.7); 
+	REQUIRE(max[3][4].y < -3.1); 
+
+}
+
+//check for nan in y 
+//make sure transforms are correct
+TEST_CASE("Test the transforming of points"){
+	//No transform needed 
+	vector<Point> points = {Point( 1.01761, -2.58591, 1.98454, 0 ), 
+		Point( 2.25616, -3.17233, 4.32981, 0), Point(0.469131, -2.78297, 0.999927, 0), 
+		Point(1.09255, -2.55152, 2.09672, 0 )
+	}; 
+
+	float angle = 0.0; 
+	float cameraHeight = 0.0; 
+	transformPoints(points, angle, cameraHeight); 
+
+	REQUIRE(points[0].x == 1.01761); 
+	REQUIRE(points[0].y == -2.58591); 
+	REQUIRE(points[0].z == 1.98454); 
+
+	//
 
 }

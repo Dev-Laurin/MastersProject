@@ -48,11 +48,19 @@ var text = document.getElementById('text');
 var groundGridSize = 200; 
 var groundDivisions = 10; 
 
+var controls = new THREE.OrbitControls(camera); 
+//add point at (0,0,0)
+var geo = new THREE.SphereGeometry(5, 32, 32); 
+var mat = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+var sphere = new THREE.Mesh(geo, mat); 
+
 init();
 
 function init(){
+
 	//Add the camera to the scene.
 	scene.add(camera); 
+	scene.add(sphere); 
 
 	//Start the renderer. 
 	renderer.setSize(WIDTH, HEIGHT); 
@@ -76,6 +84,8 @@ function init(){
 	camera.position.y = 70; 
 
 	camera.rotation.x = 6; 
+
+	controls.update(); 
 
 /*
 		camera.position.z = 0;
@@ -101,6 +111,8 @@ function init(){
 
 	text.innerText = "Environment" //"Plane: ( , , )"
 
+	
+
 } 
 
 function drawBins(){
@@ -111,7 +123,16 @@ function drawBins(){
 
 	for(var x=0; x<grid.length; x++){
 		//The X bin position from left to right in view range 
-		var realXBinCoord = x - viewWidth/2; 
+		var realXBinCoord = x - (grid.length/2); 
+
+		if(realXBinCoord < 0){
+			realXBinCoord = realXBinCoord * groundSquareSize + 
+					groundSquareSize/2;
+		}
+		else{
+			realXBinCoord = realXBinCoord * groundSquareSize - 
+					groundSquareSize/2; 
+		}
 
 		for(var z=0; z<grid[x].length; z++){
 			//The Z bin from 0 forward 
@@ -129,22 +150,31 @@ function drawBins(){
 				var wireframe = new THREE.WireframeHelper(cube, 0x00ff00); 
 
 				//Position of cube 
-				cube.position.x = realXBinCoord * groundSquareSize - 
-				groundSquareSize/2; // + offsetFromGrid; 
+
+				cube.position.x = realXBinCoord; 
 				cube.position.y = (grid[x][z].y * groundSquareSize)/2; 
-				cube.position.z =  z * (-groundSquareSize/2); //+ offsetFromGrid; 
+				cube.position.z =  z * (-groundSquareSize) - groundSquareSize/2; 
 
 				//Position of wireframe 
-				wireframe.position.x = realXBinCoord * groundSquareSize - 
-				groundSquareSize/2; // + offsetFromGrid; 
+				wireframe.position.x = realXBinCoord; 
 				wireframe.position.y = (grid[x][z].y * groundSquareSize)/2; 
-				wireframe.position.z =  z * (-groundSquareSize/2); // + offsetFromGrid; 
+				wireframe.position.z =  z * (-groundSquareSize) - groundSquareSize/2; 
 
 				scene.add(cube); 
 				scene.add(wireframe); 
 
 				console.log("X coord: ")
+				console.log(cube.position.x)
+				console.log("from")
 				console.log(realXBinCoord)
+				console.log("vs")
+				console.log(grid[x][z].x)
+				console.log("X Bin")
+				console.log(x)
+				console.log("grid.length/2")
+				console.log(grid.length/2)
+				console.log("Y coord: ")
+				console.log(grid[x][z].y)
 				console.log("Z coord: ")
 				console.log(z)
 				console.log("grid len: ")
@@ -188,7 +218,7 @@ function update() {
 		}
 	} */ 
 
-
+	controls.update(); 
 	 
 	//Draw
 	renderer.render(scene, camera); 
