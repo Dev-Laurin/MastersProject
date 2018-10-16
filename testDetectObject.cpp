@@ -328,6 +328,18 @@ TEST_CASE("Test the transforming of points"){
 	REQUIRE(points[0].y == -2.58591); 
 	REQUIRE(points[0].z == 1.98454); 
 
-	//
-
 }
+
+TEST_CASE("Transform Point Simple"){
+	Point kinect(1.2, 7.0, 2.2, 0.0); 
+	float height = 1.2; 
+	float angle = 20.0; 
+	transformPoint(kinect, angle, height); 
+
+	REQUIRE(kinect.x == -1.2); 
+	REQUIRE(kinect.y < 4.63); 
+	REQUIRE(kinect.y > 4.62); 
+	REQUIRE(kinect.z < 4.47); 
+	REQUIRE(kinect.z > 4.46); 
+}
+

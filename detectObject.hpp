@@ -261,16 +261,23 @@ void filterIntoObjectPointsOnly(vector<Point>& threeD,
 }
 
 void transformPoint(Point &point, float &xAxisRotationAngle, float &cameraHeightFromGround){
-	//multiply by the rotation matrix
+	
+	//X axis reversed 
+	point.x = -point.x;
 
+	const double PI = 3.1415926535897; 
+
+	//multiply by the rotation matrix
 	if(xAxisRotationAngle != 0){
 		//save for math correctness 
 		Point kinect = point; 
 		//Y 
-		point.y = (kinect.y * cos(xAxisRotationAngle)) - (sin(xAxisRotationAngle) * kinect.z);  
+		point.y = (kinect.y * cos((xAxisRotationAngle * PI) / 180.0)) - (sin((xAxisRotationAngle * PI) / 180.0) * kinect.z);  
 		//Z
-		point.z = kinect.y * (sin(xAxisRotationAngle) + kinect.z * cos(xAxisRotationAngle)); 
+		point.z = kinect.y * sin((xAxisRotationAngle * PI) / 180.0) + kinect.z * cos((xAxisRotationAngle * PI) / 180.0); 
 		
+		cout << "Point.y after rotation: " << endl; 
+		cout << point.y << endl; 
 	}
 	
 	//add translation transform to point
