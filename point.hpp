@@ -14,6 +14,7 @@ public:
 		rgb = 0.0; 
 	}
 	Point(double x2, double y2, double z2, double rgb2) : x(x2), y(y2), z(z2), rgb(rgb2) {}
+	Point(double x2, double y2, double z2) : x(x2), y(y2), z(z2) {}
 	double x; 
 	double y; 
 	double z; 

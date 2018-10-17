@@ -120,9 +120,14 @@ int main(int argc, char *argv[])
 /// [main]
 {
   //Create JS File for writing 
- 
-  
- int width = 10; //meters 
+
+  //The Kinect's width and depth that's viewable by sensor in Meters
+ float kinectMinX = -3.2; 
+ float kinectMinZ = 0.4; 
+
+ float binSize = 0.004; //Meters
+ float kinectMaxXWindow = 6.4; //Meters 
+ int width = kinectMaxXWindow/binSize; //meters 
  vector<vector<Point>> bins(width,
       vector<Point>(width , Point(0, 0, 0, 0))); 
   //keep track of which point is the biggest in the Y 
@@ -388,106 +393,48 @@ int main(int argc, char *argv[])
 
       //MARK: Getting Point Data
       //GET RBGD Points from combined Depth & Color image
-      vector<Point> framePoints(registered.width*registered.height); 
+      vector<Point> framePoints(undistorted.width*undistorted.height); 
 
       int index = 0; 
-      for(size_t i=0; i<registered.height; ++i){
-        for(size_t j=0; j<registered.width; ++j){
-          float x,y,z,rgbData; 
+      for(int i=0; i<undistorted.height; ++i){
+        for(int j=0; j<undistorted.width; ++j){
+          float x,y,z; 
 
           //IF color is not needed can use getPointXYZ() for faster
             //computation 
-          registration->getPointXYZRGB(&undistorted, &registered, i, j, x, y, z, rgbData);  
-          Point p(x,y,z,rgbData); 
+          registration->getPointXYZ(&undistorted, i, j, x, y, z);  
+          Point p(x,y,z); 
           framePoints[index] = p; 
           ++index; 
         }
       }
 
-      //MARK: Filter 
-      //Filter out bad data 
-    //  vector<Point>filteredPoints(registered.width*registered.height);  
-   //   filterPoints(framePoints,filteredPoints); 
+//      ofstream debugFile("debug.txt"); 
 
-      ofstream debugFile("debug.txt"); 
-
-/*
-      for(int i=0; i<framePoints.size(); i++){
-        framePoints[i].draw(debugFile); 
-        debugFile << endl; 
-      } */ 
-
-      //MARK: Find Floor Algorithm 
-      //Find floor 
-      vector<float> plane(4);
-      vector<float> normal(3); 
-      // std::mt19937 gen(time(0)); 
-      // Point onPlane; 
-      vector<float> gravityNormalVector({0, -1, 0}); 
-       //3 m? TODO: Change
       float cameraHeight = 0.0; // 3.0;
       float xAxisAngleRotation = 0; // 20; //degrees 
-
-     // std::uniform_int_distribution<int>dis(0, filteredPoints.size()-1);
-     // findFloorPlane(filteredPoints, plane, gen, dis, normal, 
-     //   onPlane, gravityNormalVector, robotSize); 
-  
-      //MARK: Draw Floor 
-      //Draw the Floor plane on the RGB plane
-      //drawFloorPlane(rgb, plane, filteredPoints, normal); 
-
-      //Calculate the floor plane from our knowledge of the kinect's position
-      //https://stackoverflow.com/questions/22234248/how-to-convert-points-between-two-coordinate-systems-with-different-rotations
-      //https://gamedev.stackexchange.com/questions/26084/how-to-get-the-rotation-matrix-to-transform-between-two-3d-cartesian-coordinate
-      //Multiplication Help: http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/#an-introduction-to-matrices
-      //https://math.stackexchange.com/questions/72014/given-an-angle-in-radians-how-could-i-calculate-a-4x4-rotation-matrix-about-the
-      getFloorPlane(plane, xAxisAngleRotation, cameraHeight); 
-      
-      //write the plane coordinates to JS file for viewing later
-    //  writePlaneToJS(plane); 
-
-      //Transform points into our 3D space (rotation transform) where
-      //  our camera is level for easy algorithm manipulation of data 
-  /*    transformPoints(framePoints, xAxisAngleRotation, cameraHeight); 
-debugFile << "After Transform: " << endl; 
-for(int i=0; i<framePoints.size(); i++){
-        framePoints[i].draw(debugFile); 
-        debugFile << endl; 
-      } */ 
-
 
       //MARK: Segment Into Objects 
       //place points into bins based on their x & z value
       
       //Segment out the objects based on 3D point depth & Euclidean Distance
         //to each other 
-      float robotBase = 1.0; //2meters? 
-      segmentIntoObjects(framePoints, robotBase, 
-        maximums, bins);
+     
+     //Segfaulting here-------------------------------
+      segmentIntoObjects(framePoints, binSize, 
+        maximums, bins, kinectMinX, kinectMinZ);
   
       //Save maximums to JS file for viewing later 
-      ofstream jsFile("data.js"); 
-      initJSFile(jsFile, "grid");
-      writeToJS(maximums, jsFile); 
+//      ofstream jsFile("data.js"); 
+//      initJSFile(jsFile, "grid");
+//      writeToJS(maximums, jsFile); 
 
-      endWritingPoints(jsFile); 
-      writeVariable(jsFile, width, width);
+//      endWritingPoints(jsFile); 
+//      writeVariable(jsFile, width, width);
 
-      jsFile.close(); 
-      debugFile.close(); 
-      /*
-        //raw data from kinect 
-      ofstream rawKinectDataFile("raw.js"); 
+//      jsFile.close(); 
+//      debugFile.close(); */ 
 
-      for(unsigned int i=0; i<framePoints.size(); i++){
-        rawKinectDataFile << "(" << framePoints[i].x << ", "; 
-        rawKinectDataFile << framePoints[i].y << ", "; 
-        rawKinectDataFile << framePoints[i].z << ")" << endl; 
-      }
-      */ 
-
-       //cout << framePoints[100][100].rgb << endl; //Printing out x-coordinate of first pixel
-     
 /// [registration]
     }
 
