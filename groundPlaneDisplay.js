@@ -31,7 +31,8 @@ const scene = new THREE.Scene();
 
 //Plane 
 //(width, height, width segments, height segments)
-var geometry = new THREE.PlaneGeometry(10, 10, 32); 
+var geometry = new THREE.PlaneGeometry(grid.length *2 , grid.length *2,
+ 32); 
 var material = new THREE.MeshBasicMaterial( {
 	color: 0xffff00, side: THREE.DoubleSide
 }); 
@@ -46,13 +47,22 @@ var text = document.getElementById('text');
 
 //2D Ground Grid 
 var groundGridSize = 200; 
-var groundDivisions = 10; 
+var groundDivisions = grid.length * 2; 
 
 var controls = new THREE.OrbitControls(camera); 
+
+
+//Add Kinect for reference size 
+var geometry = new THREE.BoxGeometry(25, 
+					6, 6);
+var material = new THREE.MeshBasicMaterial({color: 0xD3D3D3}); 
+var cube = new THREE.Mesh(geometry, material);
+scene.add(cube); 
+
 //add point at (0,0,0)
-var geo = new THREE.SphereGeometry(5, 32, 32); 
-var mat = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-var sphere = new THREE.Mesh(geo, mat); 
+// var geo = new THREE.SphereGeometry(5, 32, 32); 
+// var mat = new THREE.MeshBasicMaterial( {color: 0xD3D3D3} );
+// var sphere = new THREE.Mesh(geo, mat); 
 
 init();
 
@@ -60,7 +70,7 @@ function init(){
 
 	//Add the camera to the scene.
 	scene.add(camera); 
-	scene.add(sphere); 
+	//scene.add(sphere); 
 
 	//Start the renderer. 
 	renderer.setSize(WIDTH, HEIGHT); 
@@ -73,9 +83,9 @@ function init(){
 
 	//add the ground plane wireframe
 	/////////////////////////
-	var wireframe = new THREE.GridHelper(groundGridSize, 
-		groundDivisions, 0xffffff, 0xffffff); 
-	scene.add(wireframe);  
+//	var wireframe = new THREE.GridHelper(groundGridSize, 
+//		groundDivisions, 0xffffff, 0xffffff); 
+//	scene.add(wireframe);  
 	/////////////////////
 
 //Preferred Camera position
@@ -94,7 +104,8 @@ function init(){
 	camera.rotation.x = 5;
 */  
 	//create a point light 
-	const pointLight = new THREE.PointLight(0xFFFFFF); 
+	const pointLight = new THREE.PointLight(0xFFFFFF, 1, 100); 
+	pointLight.castShadow = true; 
 
 	//set its position 
 	pointLight.position.x = 10; 
@@ -118,7 +129,7 @@ function init(){
 function drawBins(){
 	//grid is our variable with our data 
 
-	var groundSquareSize = groundGridSize/groundDivisions - 0.5; //account for lines 
+	var groundSquareSize = binSize * 100; // groundGridSize/groundDivisions - 0.5; //account for lines 
 	console.log(groundSquareSize)
 
 	for(var x=0; x<grid.length; x++){
@@ -140,14 +151,22 @@ function drawBins(){
 			if(grid[x][z].y != 0){
 				//Cube model 
 				var geometry = new THREE.BoxGeometry(groundSquareSize, 
-					grid[x][z].y * groundSquareSize, groundSquareSize);
-				var material = new THREE.MeshBasicMaterial({color: 0x00ff00}); 
-				var cube = new THREE.Mesh(geometry, material);
-				cube.material.opacity = 0.25; 
-				cube.material.transparent = true;
+					grid[x][z].y * 100 /*groundSquareSize */ , groundSquareSize);
+				
+				//if the object is greater than 5 cm - not drivable 
+				var color = 0xff0000; 
+				if(grid[x][z].y * 100 > 5){
+					color = 0xff0000; 
+				}
+				else{
+					color = 0x00ff00; 
+				}
 
+				var material = new THREE.MeshBasicMaterial({color: color}); 
+				var cube = new THREE.Mesh(geometry, material);
+ 
 				//Wireframe of cube  
-				var wireframe = new THREE.WireframeHelper(cube, 0x00ff00); 
+				var wireframe = new THREE.WireframeHelper(cube, color); 
 
 				//Position of cube 
 
@@ -163,22 +182,22 @@ function drawBins(){
 				scene.add(cube); 
 				scene.add(wireframe); 
 
-				console.log("X coord: ")
-				console.log(cube.position.x)
-				console.log("from")
-				console.log(realXBinCoord)
-				console.log("vs")
-				console.log(grid[x][z].x)
-				console.log("X Bin")
-				console.log(x)
-				console.log("grid.length/2")
-				console.log(grid.length/2)
-				console.log("Y coord: ")
-				console.log(grid[x][z].y)
-				console.log("Z coord: ")
-				console.log(z)
-				console.log("grid len: ")
-	console.log(grid.length)
+	// 			console.log("X coord: ")
+	// 			console.log(cube.position.x)
+	// 			console.log("from")
+	// 			console.log(realXBinCoord)
+	// 			console.log("vs")
+	// 			console.log(grid[x][z].x)
+	// 			console.log("X Bin")
+	// 			console.log(x)
+	// 			console.log("grid.length/2")
+	// 			console.log(grid.length/2)
+	 			console.log("Y coord: ")
+	 			console.log(grid[x][z].y)
+	// 			console.log("Z coord: ")
+	// 			console.log(z)
+	// 			console.log("grid len: ")
+	// console.log(grid.length)
 		
 			}
 		}

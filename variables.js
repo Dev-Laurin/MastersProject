@@ -1,0 +1,1 @@
+../../libfreenect2/build/bin/variables.js

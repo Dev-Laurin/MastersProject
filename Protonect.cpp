@@ -116,17 +116,33 @@ public:
  * - <number> Serial number of the device to open.
  * - -noviewer Disable viewer window.
  */
+
+/** 
+* Arguments for height map 
+* Accepted arguments: 
+* -binSize=<meters> The sizes of the squares for the map in meters. 
+For example: We want an accuracy of 4cm. So -binSize=0.04 
+* -angle=<degrees> The angle of the Kinect (X axis) in degrees from the flat floor plane. 
+* -height=<meters> The height of the Kinect from the ground. 
+*/ 
 int main(int argc, char *argv[])
 /// [main]
 {
-  //Create JS File for writing 
+ /////////////////////Height Map Code////////////////////////
+ //Can change these as needed (see args first)
+  //Variables needed for coordinate change to world coords 
+  float cameraHeight = 0.0; //meters 
+  float xAxisAngleRotation = 0; //degrees 
 
+  //Variables needed for bin creation/height map 
   //The Kinect's width and depth that's viewable by sensor in Meters
  float kinectMinX = -3.2; 
  float kinectMinZ = 0.4; 
-
- float binSize = 0.004; //Meters
+ float binSize = 0.04; //Meters
  float kinectMaxXWindow = 6.4; //Meters 
+
+
+//Do not change these
  int width = kinectMaxXWindow/binSize; //meters 
  vector<vector<Point>> bins(width,
       vector<Point>(width , Point(0, 0, 0, 0))); 
@@ -134,11 +150,19 @@ int main(int argc, char *argv[])
   vector<vector<Point>> maximums(width, 
         vector<Point>(width, Point(0,0,0,0)));
 
+  //initialize grid size for JS visualization 
+  ofstream jsVariablesFile("variables.js"); 
+  jsVariablesFile << "//Size of grid based on arguments" << endl; 
+  jsVariablesFile << "var gridSize = " << width << ";" << endl; 
+  jsVariablesFile << "var binSize = " << binSize << ";" << endl; 
+  jsVariablesFile.close(); 
+  //////////////////////////////////////////////////////////////
+
   ///
   std::string program_path(argv[0]);
   std::cerr << "Version: " << LIBFREENECT2_VERSION << std::endl;
   std::cerr << "Environment variables: LOGFILE=<protonect.log>" << std::endl;
-  std::cerr << "Usage: " << program_path << " [-gpu=<id>] [gl | cl | clkde | cuda | cudakde | cpu] [<device serial>]" << std::endl;
+  std::cerr << "Usage: " << program_path << " [-binSize=<sizeInMeters> -angle=<degrees> -height=<heightOfKinectFromGroundInMeters> -gpu=<id>] [gl | cl | clkde | cuda | cudakde | cpu] [<device serial>]" << std::endl;
   std::cerr << "        [-noviewer] [-norgb | -nodepth] [-help] [-version]" << std::endl;
   std::cerr << "        [-frames <number of frames to process>]" << std::endl;
   std::cerr << "To pause and unpause: pkill -USR1 Protonect" << std::endl;
@@ -190,6 +214,19 @@ int main(int argc, char *argv[])
     {
       // Just let the initial lines display at the beginning of main
       return 0;
+    }
+    else if(arg.find("-binSize=")){
+      binSize = atoi(argv[argI] + 9); 
+    }
+    else if(arg.find("-angle=")){
+      xAxisAngleRotation = atoi(argv[argI] + 7); 
+      //Convert to radians 
+      const double PI = 3.1415926535897; 
+      //mult by -1 because we are rotating down (right)
+      xAxisAngleRotation = ((xAxisAngleRotation * PI) / 180.0) * -1; 
+    }
+    else if(arg.find("-height=")){
+      cameraHeight = atoi(argv[argI] + 8); 
     }
     else if(arg.find("-gpu=") == 0)
     {
@@ -387,17 +424,16 @@ int main(int argc, char *argv[])
     if (enable_rgb && enable_depth)
     {
 /// [registration]
+///////////////////////////////Height Map Code//////////////////////////////
       //(RGB frame, Depth Frame, Undistored Depth frame, Color image for depth image, 
         //enable filter)
       registration->apply(rgb, depth, &undistorted, &registered, true);
 
       //MARK: Getting Point Data
-      //GET RBGD Points from combined Depth & Color image
       vector<Point> framePoints(undistorted.width*undistorted.height); 
-
       int index = 0; 
-      for(int i=0; i<undistorted.height; ++i){
-        for(int j=0; j<undistorted.width; ++j){
+      for(unsigned int i=0; i<undistorted.height; ++i){
+        for(unsigned int j=0; j<undistorted.width; ++j){
           float x,y,z; 
 
           //IF color is not needed can use getPointXYZ() for faster
@@ -409,31 +445,23 @@ int main(int argc, char *argv[])
         }
       }
 
-//      ofstream debugFile("debug.txt"); 
-
-      float cameraHeight = 0.0; // 3.0;
-      float xAxisAngleRotation = 0; // 20; //degrees 
-
-      //MARK: Segment Into Objects 
+      //MARK: Segment Into Bins 
       //place points into bins based on their x & z value
-      
-      //Segment out the objects based on 3D point depth & Euclidean Distance
-        //to each other 
-     
-     //Segfaulting here-------------------------------
       segmentIntoObjects(framePoints, binSize, 
-        maximums, bins, kinectMinX, kinectMinZ);
+        maximums, bins, kinectMinX, kinectMinZ, xAxisAngleRotation,
+        cameraHeight);
   
-      //Save maximums to JS file for viewing later 
-//      ofstream jsFile("data.js"); 
-//      initJSFile(jsFile, "grid");
-//      writeToJS(maximums, jsFile); 
+      //MARK: Save maximums to JS file for viewing later 
+      ofstream jsFile("data.js"); 
+      initJSFile(jsFile, "grid");
+      writeToJS(maximums, jsFile); 
 
-//      endWritingPoints(jsFile); 
-//      writeVariable(jsFile, width, width);
+      endWritingPoints(jsFile); 
+      writeVariable(jsFile, width, width);
 
-//      jsFile.close(); 
-//      debugFile.close(); */ 
+      jsFile.close(); 
+
+/////////////////////////////////////////////////////////////////////
 
 /// [registration]
     }
@@ -477,12 +505,6 @@ int main(int argc, char *argv[])
   dev->stop();
   dev->close();
 /// [stop]
-   
-  
-
-  
-
-  //rawKinectDataFile.close(); 
 
   delete registration;
 
