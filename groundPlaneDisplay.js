@@ -5,8 +5,8 @@
 
 //GLOBALS 
 //Set the scene size. 
-const WIDTH = 800; 
-const HEIGHT = 300; 
+const WIDTH = 1000; 
+const HEIGHT = 800; 
 
 //Set some camera attributes. 
 const VIEW_ANGLE = 45; 
@@ -43,8 +43,6 @@ var helper = new THREE.PlaneHelper(plane, 100, 0xffff00);
 var i = 0; 
 var frame = 0; 
 
-var text = document.getElementById('text'); 
-
 //2D Ground Grid 
 var groundGridSize = 200; 
 var groundDivisions = grid.length * 2; 
@@ -56,13 +54,8 @@ var controls = new THREE.OrbitControls(camera);
 var geometry = new THREE.BoxGeometry(25, 
 					6, 6);
 var material = new THREE.MeshBasicMaterial({color: 0xD3D3D3}); 
-var cube = new THREE.Mesh(geometry, material);
-scene.add(cube); 
-
-//add point at (0,0,0)
-// var geo = new THREE.SphereGeometry(5, 32, 32); 
-// var mat = new THREE.MeshBasicMaterial( {color: 0xD3D3D3} );
-// var sphere = new THREE.Mesh(geo, mat); 
+var kinect = new THREE.Mesh(geometry, material);
+scene.add(kinect); 
 
 init();
 
@@ -78,31 +71,14 @@ function init(){
 	//Attach the renderer-supplied DOM element. 
 	container.appendChild(renderer.domElement); 
 
-//	scene.add(plane); 
-//	plane.rotation.x = 5; 
-
-	//add the ground plane wireframe
-	/////////////////////////
-//	var wireframe = new THREE.GridHelper(groundGridSize, 
-//		groundDivisions, 0xffffff, 0xffffff); 
-//	scene.add(wireframe);  
-	/////////////////////
-
 //Preferred Camera position
 
-	camera.position.z = 110;
-	camera.position.y = 70; 
-
-	camera.rotation.x = 6; 
+	camera.position.z = -180;
+	camera.position.y = 170; 
+	camera.rotation.x = 0; 
 
 	controls.update(); 
 
-/*
-		camera.position.z = 0;
-	camera.position.y = 150; 
-
-	camera.rotation.x = 5;
-*/  
 	//create a point light 
 	const pointLight = new THREE.PointLight(0xFFFFFF, 1, 100); 
 	pointLight.castShadow = true; 
@@ -119,10 +95,6 @@ function init(){
 
 	//schedule the first frame 
 	requestAnimationFrame(update); 
-
-	text.innerText = "Environment" //"Plane: ( , , )"
-
-	
 
 } 
 
@@ -155,7 +127,7 @@ function drawBins(){
 				
 				//if the object is greater than 5 cm - not drivable 
 				var color = 0xff0000; 
-				if(grid[x][z].y * 100 > 5){
+				if(grid[x][z].y * 100 > cmCanDrive){
 					color = 0xff0000; 
 				}
 				else{
@@ -166,39 +138,21 @@ function drawBins(){
 				var cube = new THREE.Mesh(geometry, material);
  
 				//Wireframe of cube  
-				var wireframe = new THREE.WireframeHelper(cube, color); 
+				var wireframe = new THREE.WireframeHelper(cube, 0x000000); 
 
 				//Position of cube 
 
 				cube.position.x = realXBinCoord; 
-				cube.position.y = (grid[x][z].y * groundSquareSize)/2; 
-				cube.position.z =  z * (-groundSquareSize) - groundSquareSize/2; 
+				cube.position.y += (grid[x][z].y *100)/2; // (grid[x][z].y * groundSquareSize)/2; 
+				cube.position.z =  z * (groundSquareSize) + groundSquareSize/2; 
 
 				//Position of wireframe 
 				wireframe.position.x = realXBinCoord; 
-				wireframe.position.y = (grid[x][z].y * groundSquareSize)/2; 
-				wireframe.position.z =  z * (-groundSquareSize) - groundSquareSize/2; 
+				wireframe.position.y += (grid[x][z].y *100)/2;// (grid[x][z].y * groundSquareSize)/2; 
+				wireframe.position.z =  z * (groundSquareSize) + groundSquareSize/2; 
 
 				scene.add(cube); 
 				scene.add(wireframe); 
-
-	// 			console.log("X coord: ")
-	// 			console.log(cube.position.x)
-	// 			console.log("from")
-	// 			console.log(realXBinCoord)
-	// 			console.log("vs")
-	// 			console.log(grid[x][z].x)
-	// 			console.log("X Bin")
-	// 			console.log(x)
-	// 			console.log("grid.length/2")
-	// 			console.log(grid.length/2)
-	 			console.log("Y coord: ")
-	 			console.log(grid[x][z].y)
-	// 			console.log("Z coord: ")
-	// 			console.log(z)
-	// 			console.log("grid len: ")
-	// console.log(grid.length)
-		
 			}
 		}
 		
@@ -206,36 +160,10 @@ function drawBins(){
 	
 }
 
-//TODO
 //Rotating camera functionality
 //https://stackoverflow.com/questions/8426822/rotate-camera-in-three-js-with-mouse
 function update() {
-	 
-	/*
-	//every _ frame, change the plane so the user can see
-	if(frame % 120 == 0){
-		//change plane to new value 
-		var newPlane = planes[i]
-		/*
-		plane.position.x = newPlane.x;  
-		plane.position.y = newPlane.y; 
-		plane.position.z = newPlane.z; 
-		
-		var vectorThree = new THREE.Vector3(newPlane.x, newPlane.y,
-		newPlane.z); 
-		plane.normal = vectorThree;
-
-		//Update the text display 
-		text.innerText = "Plane: (" + plane.normal.x + 
-		", " + plane.normal.y + ", " + plane.normal.z + 
-		")" 
-
-		i++; 
-
-		if(planes.length <= i){
-			i = 0; 
-		}
-	} */ 
+	reloadData(); 
 
 	controls.update(); 
 	 
@@ -245,4 +173,12 @@ function update() {
 	//schedule the next frame. 
 	requestAnimationFrame(update); 
 	frame++; 
+}
+
+//reload variable js file 
+function reloadData(){
+	var head = document.getElementsByTagName('head')[0]; 
+	var script = document.createElement('script'); 
+	script.src = 'data.js'; 
+	head.appendChild(script); 
 }

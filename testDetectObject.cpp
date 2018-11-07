@@ -11,6 +11,7 @@ using std::vector;
 #include "point.hpp"
 #include "detectObject.hpp"
 #include "writeToJSFile.hpp"
+#include "vector3D.h"
 //#include <ctime>
 
 //Tells catch to provide a main (one file only)
@@ -343,3 +344,6 @@ TEST_CASE("Transform Point Simple"){
 	REQUIRE(kinect.z > 4.46); 
 }
 
+TEST_CASE("Vector3D class test."){
+	vector3D vec3()
+}

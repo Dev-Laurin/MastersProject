@@ -120,10 +120,11 @@ public:
 /** 
 * Arguments for height map 
 * Accepted arguments: 
-* -binSize=<meters> The sizes of the squares for the map in meters. 
-For example: We want an accuracy of 4cm. So -binSize=0.04 
+* -binSize=<centimeters> The sizes of the squares for the map in meters. 
+For example: We want an accuracy of 4cm. So -binSize=4
 * -angle=<degrees> The angle of the Kinect (X axis) in degrees from the flat floor plane. 
-* -height=<meters> The height of the Kinect from the ground. 
+* -height=<centimeters> The height of the Kinect from the ground. 
+* -clearance=<centimeters> The height where the robot can clear if points are found at this height or above. 
 */ 
 int main(int argc, char *argv[])
 /// [main]
@@ -131,38 +132,26 @@ int main(int argc, char *argv[])
  /////////////////////Height Map Code////////////////////////
  //Can change these as needed (see args first)
   //Variables needed for coordinate change to world coords 
-  float cameraHeight = 0.0; //meters 
-  float xAxisAngleRotation = 0; //degrees 
+  double cameraHeight = 0.0; //meters 
+  double xAxisAngleRotation = 0; //degrees 
+  double heightClearance = 5.0; //meters 
+  double drivableCM = 1.0; //at what centimeter value can the robot drive over?
 
   //Variables needed for bin creation/height map 
   //The Kinect's width and depth that's viewable by sensor in Meters
- float kinectMinX = -3.2; 
- float kinectMinZ = 0.4; 
- float binSize = 0.04; //Meters
- float kinectMaxXWindow = 6.4; //Meters 
+ double kinectMinX = -3.2; 
+ double kinectMinZ = 0.4; 
+ double binSize = 0.04; //meters 
+ double kinectMaxXWindow = 6.4; //Meters 
+ 
 
-
-//Do not change these
- int width = kinectMaxXWindow/binSize; //meters 
- vector<vector<Point>> bins(width,
-      vector<Point>(width , Point(0, 0, 0, 0))); 
-  //keep track of which point is the biggest in the Y 
-  vector<vector<Point>> maximums(width, 
-        vector<Point>(width, Point(0,0,0,0)));
-
-  //initialize grid size for JS visualization 
-  ofstream jsVariablesFile("variables.js"); 
-  jsVariablesFile << "//Size of grid based on arguments" << endl; 
-  jsVariablesFile << "var gridSize = " << width << ";" << endl; 
-  jsVariablesFile << "var binSize = " << binSize << ";" << endl; 
-  jsVariablesFile.close(); 
   //////////////////////////////////////////////////////////////
 
   ///
   std::string program_path(argv[0]);
   std::cerr << "Version: " << LIBFREENECT2_VERSION << std::endl;
   std::cerr << "Environment variables: LOGFILE=<protonect.log>" << std::endl;
-  std::cerr << "Usage: " << program_path << " [-binSize=<sizeInMeters> -angle=<degrees> -height=<heightOfKinectFromGroundInMeters> -gpu=<id>] [gl | cl | clkde | cuda | cudakde | cpu] [<device serial>]" << std::endl;
+  std::cerr << "Usage: " << program_path << " [-binSize=<sizeInCentiMeters> -angle=<degrees> -height=<heightOfKinectFromGroundInCentiMeters> -gpu=<id>] [gl | cl | clkde | cuda | cudakde | cpu] [<device serial>]" << std::endl;
   std::cerr << "        [-noviewer] [-norgb | -nodepth] [-help] [-version]" << std::endl;
   std::cerr << "        [-frames <number of frames to process>]" << std::endl;
   std::cerr << "To pause and unpause: pkill -USR1 Protonect" << std::endl;
@@ -215,18 +204,44 @@ int main(int argc, char *argv[])
       // Just let the initial lines display at the beginning of main
       return 0;
     }
-    else if(arg.find("-binSize=")){
-      binSize = atoi(argv[argI] + 9); 
+    else if(arg.substr(0, 9) == "-binSize="){
+      //Get our argument number 
+      std::string binStr = arg.substr(9, arg.size()-1);  
+
+      //convert str to number 
+      binSize = atoi(binStr.c_str()); 
+
+      //Convert from centimeters to meters 
+      binSize /= 100.0; 
+
+      if(binSize == 0){
+        std::cerr << "Bin Size cannot be 0." << endl;
+        return 0; 
+      }
     }
-    else if(arg.find("-angle=")){
-      xAxisAngleRotation = atoi(argv[argI] + 7); 
+    else if(arg.substr(0, 7) == "-angle="){
+      std::string angle = arg.substr(7, arg.size()-1); 
+      xAxisAngleRotation = atoi(angle.c_str()); 
       //Convert to radians 
       const double PI = 3.1415926535897; 
       //mult by -1 because we are rotating down (right)
       xAxisAngleRotation = ((xAxisAngleRotation * PI) / 180.0) * -1; 
     }
-    else if(arg.find("-height=")){
-      cameraHeight = atoi(argv[argI] + 8); 
+    else if(arg.substr(0, 8) == "-height="){
+      std::string height = arg.substr(8, arg.size()-1); 
+      cameraHeight = atoi(height.c_str()); 
+      //Convert from centimeters to meters 
+      cameraHeight /= 100.0; 
+    }
+    else if(arg.substr(0, 11) == "-clearance="){
+      std::string height = arg.substr(11, arg.size()-1); 
+      heightClearance = atoi(height.c_str()); 
+      //Convert from centimeters to meters 
+      heightClearance /= 100.0; 
+    }
+    else if(arg.substr(0, 16) == "-maxCmDriveable="){
+      std::string str = arg.substr(16, arg.size()-1); 
+      drivableCM = atoi(str.c_str()); 
     }
     else if(arg.find("-gpu=") == 0)
     {
@@ -317,8 +332,26 @@ int main(int argc, char *argv[])
     else
     {
       std::cout << "Unknown argument: " << arg << std::endl;
+      return -1; 
     }
   }
+
+  //Do not change these
+ int width = kinectMaxXWindow/binSize; //meters 
+ vector<vector<vector<Point>>> bins(width,
+      vector<vector<Point>>(width , vector<Point>(0, Point(0,0,0,0)))); 
+  //keep track of which point is the biggest in the Y 
+  vector<vector<Point>> maximums(width, 
+        vector<Point>(width, Point(0,0,0,0)));
+
+  //initialize grid size for JS visualization 
+  ofstream jsVariablesFile("variables.js"); 
+  jsVariablesFile << "//Size of grid based on arguments" << endl; 
+  jsVariablesFile << "var gridSize = " << width << ";" << endl; 
+  jsVariablesFile << "var binSize = " << binSize << ";" << endl; 
+  jsVariablesFile << "var cmCanDrive = " << drivableCM << ";" << endl;
+  jsVariablesFile.close(); 
+  //////////////////////////////////
 
   if (!enable_rgb && !enable_depth)
   {
@@ -429,6 +462,10 @@ int main(int argc, char *argv[])
         //enable filter)
       registration->apply(rgb, depth, &undistorted, &registered, true);
 
+      //write all our raw points to file for graphing / analyzing 
+      ofstream rawFile("rawPoints.csv"); 
+      rawFile << "X,Y,Z," << endl; 
+
       //MARK: Getting Point Data
       vector<Point> framePoints(undistorted.width*undistorted.height); 
       int index = 0; 
@@ -441,15 +478,29 @@ int main(int argc, char *argv[])
           registration->getPointXYZ(&undistorted, i, j, x, y, z);  
           Point p(x,y,z); 
           framePoints[index] = p; 
+          rawFile << p.y << "," << p.z << "," << endl;
           ++index; 
         }
       }
+      rawFile.close(); 
+      
+
+
+      //Transform Points to World Space 
+      transformPoints(framePoints, xAxisAngleRotation, cameraHeight); 
+
+      //Filter bad points 
+      filterPoints(framePoints, heightClearance); 
 
       //MARK: Segment Into Bins 
       //place points into bins based on their x & z value
       segmentIntoObjects(framePoints, binSize, 
         maximums, bins, kinectMinX, kinectMinZ, xAxisAngleRotation,
-        cameraHeight);
+        cameraHeight, heightClearance);
+
+      //Save all points gathered in bins to file for statistical analysis
+     
+      
   
       //MARK: Save maximums to JS file for viewing later 
       ofstream jsFile("data.js"); 
