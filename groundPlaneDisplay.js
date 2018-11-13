@@ -127,7 +127,7 @@ function drawBins(){
 				
 				//if the object is greater than 5 cm - not drivable 
 				var color = 0xff0000; 
-				if(grid[x][z].y * 100 > cmCanDrive){
+				if(grid[x][z].y * 100 > cmCanDrive && grid[x][z].y * 100 < clearance ){
 					color = 0xff0000; 
 				}
 				else{

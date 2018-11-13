@@ -95,11 +95,13 @@ void filterPoints(vector<Point>&points, double & heightClearance){
 //Filter, transform, and segment the 3D points into a 2D vector 
 void segmentIntoObjects(vector<Point>& threeD, 
 	double &binSize, vector<vector<Point>>&maximums, 
-	vector<vector<vector<Point>>>&bins, double & kinectMinX, 
+	vector<vector<vector<double>>>&bins, double & kinectMinX, 
 	double & kinectMinZ, double & xAxisRotationAngle, 
 	double & cameraHeightFromGround, double &heightClearance){
 
-	ofstream binsByIndexFile("binsByIndex.txt"); 
+//	ofstream binsByIndexFile("binsByIndex.txt"); 
+	ofstream filterPoints("filterPoints.csv");
+	filterPoints << "X,Y,Z,W" << endl;  
 	for(unsigned int i=2; i<threeD.size(); i++){
 
 		//If point has a negative Z it is invalid. The kinect 
@@ -118,14 +120,49 @@ void segmentIntoObjects(vector<Point>& threeD,
 		int z = (threeD[i].z - kinectMinZ)/binSize; 
 
 		//add point to bin  
-		threeD[i].draw(cout); 
-		bins[index][z].push_back(threeD[i]); 
 
-		binsByIndexFile << "x: " << index << "z: " << z << " : " << endl; 
-		threeD[i].draw(binsByIndexFile); 
+	//	binsByIndexFile << "x: " << index << "z: " << z << " : " << endl; 
+	//	threeD[i].draw(binsByIndexFile); 
+
+		filterPoints << threeD[i].x << "," << threeD[i].y << ",";
+		filterPoints << threeD[i].z << "," << endl; 
 
 	//	threeD[i].draw(cout); 
 	//	bins[index][z][bins[index][z].size() -1 ].draw(binFile); 
+
+		//Bins Mean Trimmed Variables 
+		//SUM 
+		bins[index][z][0] += threeD[i].y; 
+		//Maximum 
+		if( bins[index][z][1] < threeD[i].y) 
+			bins[index][z][1] = threeD[i].y; 
+		//Minimum 
+		if( bins[index][z][2] > threeD[i].y )
+			bins[index][z][2] = threeD[i].y; 
+		//Total points 
+		bins[index][z][3]++; 
+		//Squared Sum 
+		bins[index][z][4] += threeD[i].y * threeD[i].y; 
+		//Variance so far 
+		/* 
+	    //Get Variance without storing all data until end and looping through
+	    First, I added up all of the numbers:1 + 2 + 3 + 4 + 5 = 15
+	    I squared the total, and then divided the number of items in the data set 15 x 15 = 225
+	    225 / 5 = 45
+	    I took my set of original numbers from step 1, squared them individually this time, and added them all up:(1 x 1) + (2 x 2) + (3 x 3) + (4 x 4) + (5 x 5) = 55
+	    I subtracted the amount in step 2 from the amount in step 3:55 - 45 = 10
+	    I subtracted 1 from the number of items in my data set:5 - 1 = 4
+	    I divided the number in step 4 by the number in step 5:10 / 4 = 2.5
+	    This is my Variance!
+	    Finally, I took the square root of the number from step 6 (the Variance),
+	    √(2.5) = 1.5811388300841898
+	    This is my Standard Deviation!
+	    ///From: https://www.statisticshowto.datasciencecentral.com/calculators/variance-and-standard-deviation-calculator/
+	    */ 
+		double sumSquared = bins[index][z][0] * bins[index][z][0]; 
+		bins[index][z][5] = (bins[index][z][4] - (sumSquared / bins[index][z][3])) / (bins[index][z][3] - 1); 
+
+		double trimmedMean = (bins[index][z][0] - bins[index][z][1] - bins[index][z][2]) / (bins[index][z][3] - 2); 
 
 		//Check if this point's Y is a new max 
 		/*
@@ -135,10 +172,11 @@ void segmentIntoObjects(vector<Point>& threeD,
 		else if(maximums[index][z].y == 0){
 			maximums[index][z] = threeD[i];
 		}*/
+		threeD[i].y = trimmedMean; 
 		maximums[index][z] = threeD[i];
 	}
-
-	binsByIndexFile.close(); 
+filterPoints.close(); 
+//	binsByIndexFile.close(); 
 
 	// ofstream binFile("binnedPoints.txt"); 
  //      binFile << "Size: " << bins.size() << endl; 

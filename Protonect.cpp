@@ -338,8 +338,8 @@ int main(int argc, char *argv[])
 
   //Do not change these
  int width = kinectMaxXWindow/binSize; //meters 
- vector<vector<vector<Point>>> bins(width,
-      vector<vector<Point>>(width , vector<Point>(0, Point(0,0,0,0)))); 
+ vector<vector<vector<double>>> bins(width,
+      vector<vector<double>>(width , vector<double>(5, 0.0))); 
   //keep track of which point is the biggest in the Y 
   vector<vector<Point>> maximums(width, 
         vector<Point>(width, Point(0,0,0,0)));
@@ -350,6 +350,7 @@ int main(int argc, char *argv[])
   jsVariablesFile << "var gridSize = " << width << ";" << endl; 
   jsVariablesFile << "var binSize = " << binSize << ";" << endl; 
   jsVariablesFile << "var cmCanDrive = " << drivableCM << ";" << endl;
+  jsVariablesFile << "var clearance = " << heightClearance << ";" << endl; 
   jsVariablesFile.close(); 
   //////////////////////////////////
 
@@ -464,7 +465,7 @@ int main(int argc, char *argv[])
 
       //write all our raw points to file for graphing / analyzing 
       ofstream rawFile("rawPoints.csv"); 
-      rawFile << "X,Y,Z," << endl; 
+      rawFile << "X,Y,Z,W" << endl; 
 
       //MARK: Getting Point Data
       vector<Point> framePoints(undistorted.width*undistorted.height); 
@@ -478,7 +479,7 @@ int main(int argc, char *argv[])
           registration->getPointXYZ(&undistorted, i, j, x, y, z);  
           Point p(x,y,z); 
           framePoints[index] = p; 
-          rawFile << p.y << "," << p.z << "," << endl;
+          rawFile <<  p.x << "," << p.y << "," << p.z << "," << endl;
           ++index; 
         }
       }
@@ -499,9 +500,7 @@ int main(int argc, char *argv[])
         cameraHeight, heightClearance);
 
       //Save all points gathered in bins to file for statistical analysis
-     
-      
-  
+
       //MARK: Save maximums to JS file for viewing later 
       ofstream jsFile("data.js"); 
       initJSFile(jsFile, "grid");
