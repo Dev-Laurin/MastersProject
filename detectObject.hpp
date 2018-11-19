@@ -100,8 +100,8 @@ void segmentIntoObjects(vector<Point>& threeD,
 	double & cameraHeightFromGround, double &heightClearance){
 
 //	ofstream binsByIndexFile("binsByIndex.txt"); 
-	ofstream filterPoints("filterPoints.csv");
-	filterPoints << "X,Y,Z,W" << endl;  
+	// ofstream filterPoints("filterPoints.csv");
+	// filterPoints << "X,Y,Z,W" << endl;  
 	for(unsigned int i=2; i<threeD.size(); i++){
 
 		//If point has a negative Z it is invalid. The kinect 
@@ -124,8 +124,8 @@ void segmentIntoObjects(vector<Point>& threeD,
 	//	binsByIndexFile << "x: " << index << "z: " << z << " : " << endl; 
 	//	threeD[i].draw(binsByIndexFile); 
 
-		filterPoints << threeD[i].x << "," << threeD[i].y << ",";
-		filterPoints << threeD[i].z << "," << endl; 
+		// filterPoints << threeD[i].x << "," << threeD[i].y << ",";
+		// filterPoints << threeD[i].z << "," << endl; 
 
 	//	threeD[i].draw(cout); 
 	//	bins[index][z][bins[index][z].size() -1 ].draw(binFile); 
@@ -161,9 +161,7 @@ void segmentIntoObjects(vector<Point>& threeD,
 	    */ 
 		double sumSquared = bins[index][z][0] * bins[index][z][0]; 
 		bins[index][z][5] = (bins[index][z][4] - (sumSquared / bins[index][z][3])) / (bins[index][z][3] - 1); 
-
 		double trimmedMean = (bins[index][z][0] - bins[index][z][1] - bins[index][z][2]) / (bins[index][z][3] - 2); 
-
 		//Check if this point's Y is a new max 
 		/*
 		if(maximums[index][z].y < threeD[i].y){
@@ -172,10 +170,13 @@ void segmentIntoObjects(vector<Point>& threeD,
 		else if(maximums[index][z].y == 0){
 			maximums[index][z] = threeD[i];
 		}*/
+
 		threeD[i].y = trimmedMean; 
+		if(std::isinf(trimmedMean) || std::isnan(trimmedMean))
+			threeD[i].y = bins[index][z][1]; 
 		maximums[index][z] = threeD[i];
 	}
-filterPoints.close(); 
+//filterPoints.close(); 
 //	binsByIndexFile.close(); 
 
 	// ofstream binFile("binnedPoints.txt"); 

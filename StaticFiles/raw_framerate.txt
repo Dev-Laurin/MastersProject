@@ -1,0 +1,35 @@
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.0046ms -> ~37.0307Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.8194ms -> ~37.2865Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 29.0283ms -> ~34.4491Hz
+The viewer is turned off. Received 100 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.8645ms -> ~37.2239Hz
+[Debug] [DepthPacketStreamParser] not all subsequences received 1022
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.8546ms -> ~37.2376Hz
+[Info] [DepthPacketStreamParser] 1 packets were lost
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.9219ms -> ~34.5758Hz
+The viewer is turned off. Received 200 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.82ms -> ~37.2856Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.7608ms -> ~37.3681Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.7649ms -> ~34.7646Hz
+The viewer is turned off. Received 300 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.7946ms -> ~37.3209Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.8871ms -> ~37.1925Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 29.2286ms -> ~34.2131Hz
+The viewer is turned off. Received 400 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.7991ms -> ~37.3147Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.6941ms -> ~37.4615Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.8198ms -> ~34.6984Hz
+The viewer is turned off. Received 500 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.8014ms -> ~37.3116Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.7606ms -> ~37.3684Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.4333ms -> ~35.17Hz
+The viewer is turned off. Received 600 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.8413ms -> ~37.256Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.9245ms -> ~37.1409Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 29.7288ms -> ~33.6374Hz
+The viewer is turned off. Received 700 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.6004ms -> ~37.5935Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 26.7638ms -> ~37.3639Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.7299ms -> ~34.807Hz
+
+37 * 16 + 34 * 6 + 33 + 35  / 24 = 36 Hz

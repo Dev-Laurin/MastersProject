@@ -464,8 +464,8 @@ int main(int argc, char *argv[])
       registration->apply(rgb, depth, &undistorted, &registered, true);
 
       //write all our raw points to file for graphing / analyzing 
-      ofstream rawFile("rawPoints.csv"); 
-      rawFile << "X,Y,Z,W" << endl; 
+       ofstream rawFile("rawPoints.csv"); 
+       rawFile << "X,Y,Z,W" << endl; 
 
       //MARK: Getting Point Data
       vector<Point> framePoints(undistorted.width*undistorted.height); 
@@ -479,37 +479,53 @@ int main(int argc, char *argv[])
           registration->getPointXYZ(&undistorted, i, j, x, y, z);  
           Point p(x,y,z); 
           framePoints[index] = p; 
-          rawFile <<  p.x << "," << p.y << "," << p.z << "," << endl;
+          if(std::isnan(p.x) || std::isnan(p.y) || 
+      std::isnan(p.z)){
+            
+          }
+          else{
+            rawFile <<  p.x << "," << p.y << "," << p.z << "," << endl;
+          }
           ++index; 
         }
       }
       rawFile.close(); 
       
 
-
+      
       //Transform Points to World Space 
       transformPoints(framePoints, xAxisAngleRotation, cameraHeight); 
 
       //Filter bad points 
       filterPoints(framePoints, heightClearance); 
 
+      ofstream fp("fp.csv"); 
+      fp << "X,Y,Z," << endl; 
+      for(int i=0; i<framePoints.size(); i++){
+        fp << framePoints[i].x << "," << framePoints[i].y << ",";
+        fp << framePoints[i].z << "," << endl; 
+      }
+      fp.close(); 
+
       //MARK: Segment Into Bins 
       //place points into bins based on their x & z value
-      segmentIntoObjects(framePoints, binSize, 
-        maximums, bins, kinectMinX, kinectMinZ, xAxisAngleRotation,
-        cameraHeight, heightClearance);
+     //  segmentIntoObjects(framePoints, binSize, 
+     //    maximums, bins, kinectMinX, kinectMinZ, xAxisAngleRotation,
+     //    cameraHeight, heightClearance);
 
-      //Save all points gathered in bins to file for statistical analysis
+     //  //Save all points gathered in bins to file for statistical analysis
+ 
+     //  //MARK: Save maximums to JS file for viewing later 
+     // ofstream jsFile("data.js"); 
+     // initJSFile(jsFile, "grid");
+     // writeToJS(maximums, jsFile); 
 
-      //MARK: Save maximums to JS file for viewing later 
-      ofstream jsFile("data.js"); 
-      initJSFile(jsFile, "grid");
-      writeToJS(maximums, jsFile); 
+     // endWritingPoints(jsFile); 
+     // writeVariable(jsFile, width, width);
 
-      endWritingPoints(jsFile); 
-      writeVariable(jsFile, width, width);
+     // jsFile.close(); 
 
-      jsFile.close(); 
+      
 
 /////////////////////////////////////////////////////////////////////
 

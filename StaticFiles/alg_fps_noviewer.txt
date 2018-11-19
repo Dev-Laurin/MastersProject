@@ -1,0 +1,626 @@
+[Info] [Freenect2DeviceImpl] opening...
+[Info] [Freenect2DeviceImpl] transfer pool sizes rgb: 20*16384 ir: 60*8*33792
+[Info] [Freenect2DeviceImpl] opened
+[Info] [Freenect2DeviceImpl] starting...
+[Debug] [Freenect2DeviceImpl] status 0x090000: 9729
+[Debug] [Freenect2DeviceImpl] status 0x090000: 9731
+[Info] [Freenect2DeviceImpl] submitting rgb transfers...
+[Info] [Freenect2DeviceImpl] submitting depth transfers...
+[Debug] [DepthPacketStreamParser] not all subsequences received 0
+[Info] [Freenect2DeviceImpl] started
+device serial: 004466165047
+device firmware: 4.0.3911.0
+[Debug] [DepthPacketStreamParser] not all subsequences received 1008
+[Debug] [DepthPacketStreamParser] not all subsequences received 1021
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 1 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 1 packets were lost
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.2378ms -> ~36.7136Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.0407ms -> ~36.9813Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 29.298ms -> ~34.132Hz
+The viewer is turned off. Received 100 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.1934ms -> ~36.7737Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.0607ms -> ~36.9539Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.4652ms -> ~35.1306Hz
+The viewer is turned off. Received 200 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.2067ms -> ~36.7556Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.0703ms -> ~36.9409Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.8422ms -> ~34.6715Hz
+The viewer is turned off. Received 300 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.1496ms -> ~36.8329Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.0769ms -> ~36.9319Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.8283ms -> ~34.6882Hz
+The viewer is turned off. Received 400 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.2379ms -> ~36.7136Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.2495ms -> ~36.698Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.9324ms -> ~34.5633Hz
+The viewer is turned off. Received 500 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.0589ms -> ~36.9564Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.2372ms -> ~36.7146Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 28.8015ms -> ~34.7204Hz
+The viewer is turned off. Received 600 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.0361ms -> ~36.9876Hz
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.5528ms -> ~36.294Hz
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 29.0063ms -> ~34.4752Hz
+The viewer is turned off. Received 700 frames. Ctrl-C to stop.
+[Info] [OpenGLDepthPacketProcessor] avg. time: 27.3682ms -> ~36.5388Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 10 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 37.3668ms -> ~26.7617Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+The viewer is turned off. Received 800 frames. Ctrl-C to stop.
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [OpenGLDepthPacketProcessor] avg. time: 31.9803ms -> ~31.2693Hz
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 13 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 13 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 30 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 55.5966ms -> ~17.9867Hz
+The viewer is turned off. Received 900 frames. Ctrl-C to stop.
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [OpenGLDepthPacketProcessor] avg. time: 35.8321ms -> ~27.908Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 30 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 13 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [OpenGLDepthPacketProcessor] avg. time: 36.8318ms -> ~27.1505Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 13 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 57.8782ms -> ~17.2777Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+The viewer is turned off. Received 1000 frames. Ctrl-C to stop.
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [OpenGLDepthPacketProcessor] avg. time: 37.2878ms -> ~26.8185Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 57.8392ms -> ~17.2893Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+The viewer is turned off. Received 1100 frames. Ctrl-C to stop.
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 13 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 13 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [OpenGLDepthPacketProcessor] avg. time: 36.0946ms -> ~27.705Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [TurboJpegRgbPacketProcessor] avg. time: 54.6312ms -> ~18.3046Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+The viewer is turned off. Received 1200 frames. Ctrl-C to stop.
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [RgbPacketStreamParser] skipping rgb packet!
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 14 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [OpenGLDepthPacketProcessor] avg. time: 36.9586ms -> ~27.0573Hz
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [DepthPacketStreamParser] 15 packets were lost
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+[Debug] [DepthPacketStreamParser] skipping depth packet
+^C[Debug] [DepthPacketStreamParser] skipping depth packet
+[Info] [Freenect2DeviceImpl] stopping...
+[Info] [Freenect2DeviceImpl] canceling rgb transfers...
+[Info] [Freenect2DeviceImpl] canceling depth transfers...
+[Info] [Freenect2DeviceImpl] stopped
+[Info] [Freenect2DeviceImpl] closing...
+[Info] [Freenect2DeviceImpl] releasing usb interfaces...
+[Info] [Freenect2DeviceImpl] deallocating usb transfer pools...
+[Info] [Freenect2DeviceImpl] closing usb device...
+[Info] [Freenect2DeviceImpl] closed
+
+27 + 18 + 27 + 17 + 26 + 17 + 27 + 27 + 17 + 31 + 26 + 36 + 34 + 36 + 36 + 34 + 36 + 36 + 34 + 36 + 36 + 34 + 36 + 36 + 34 + 36 + 36 + 35 + 36 + 36 + 34 + 36 + 36 / 33 = 31 Hz
