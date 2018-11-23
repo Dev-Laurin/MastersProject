@@ -16,6 +16,11 @@ Algorithm: I plan to use RANSAC, picking 3 random points from the 3D Point Cloud
   points to determine if they are in the same object. 
  
 
+Running: 
+	-Test
+	-Main program
+	-error testing file (statistics)
+
 Citations: 
 https://github.com/OpenKinect/libfreenect2 
 DOI 10.5281/zenodo.50641

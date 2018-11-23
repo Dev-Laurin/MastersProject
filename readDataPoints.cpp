@@ -136,7 +136,7 @@ int main(int argc, char* argv[]){
 				totalErrorPoints++; 
 				errorFile << line << endl; 
 			}
-			
+
 		// if(zSymbol == 'g'){
 		// 	if(z > zValue && !xIsError){
 		// 		//is an error point

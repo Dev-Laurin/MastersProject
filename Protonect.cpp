@@ -37,6 +37,7 @@ using std::vector;
 #include "detectObject.hpp"
 #include <fstream> 
 #include "writeToJSFile.hpp"
+#include "binData.hpp"
 using std::ofstream; 
 
 /// [headers]
@@ -338,8 +339,8 @@ int main(int argc, char *argv[])
 
   //Do not change these
  int width = kinectMaxXWindow/binSize; //meters 
- vector<vector<vector<double>>> bins(width,
-      vector<vector<double>>(width , vector<double>(5, 0.0))); 
+ vector<vector<binData>> bins(width,
+      vector<binData>(width , binData())); 
   //keep track of which point is the biggest in the Y 
   vector<vector<Point>> maximums(width, 
         vector<Point>(width, Point(0,0,0,0)));
@@ -499,31 +500,31 @@ int main(int argc, char *argv[])
       //Filter bad points 
       filterPoints(framePoints, heightClearance); 
 
-      ofstream fp("fp.csv"); 
-      fp << "X,Y,Z," << endl; 
-      for(int i=0; i<framePoints.size(); i++){
-        fp << framePoints[i].x << "," << framePoints[i].y << ",";
-        fp << framePoints[i].z << "," << endl; 
-      }
-      fp.close(); 
+      // ofstream fp("fp.csv"); 
+      // fp << "X,Y,Z," << endl; 
+      // for(int i=0; i<framePoints.size(); i++){
+      //   fp << framePoints[i].x << "," << framePoints[i].y << ",";
+      //   fp << framePoints[i].z << "," << endl; 
+      // }
+      // fp.close(); 
 
       //MARK: Segment Into Bins 
       //place points into bins based on their x & z value
-     //  segmentIntoObjects(framePoints, binSize, 
-     //    maximums, bins, kinectMinX, kinectMinZ, xAxisAngleRotation,
-     //    cameraHeight, heightClearance);
+      segmentIntoObjects(framePoints, binSize, 
+        maximums, bins, kinectMinX, kinectMinZ, xAxisAngleRotation,
+        cameraHeight, heightClearance);
 
      //  //Save all points gathered in bins to file for statistical analysis
  
-     //  //MARK: Save maximums to JS file for viewing later 
-     // ofstream jsFile("data.js"); 
-     // initJSFile(jsFile, "grid");
-     // writeToJS(maximums, jsFile); 
+      //MARK: Save maximums to JS file for viewing later 
+     ofstream jsFile("data.js"); 
+     initJSFile(jsFile, "grid");
+     writeToJS(maximums, jsFile); 
 
-     // endWritingPoints(jsFile); 
-     // writeVariable(jsFile, width, width);
+     endWritingPoints(jsFile); 
+     writeVariable(jsFile, width, width);
 
-     // jsFile.close(); 
+     jsFile.close(); 
 
       
 

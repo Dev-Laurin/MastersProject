@@ -14,7 +14,8 @@ using std::vector;
 #include <cmath> 
 #include <math.h> /* isnan */ 
 #include <fstream> 
-using std::ofstream; 
+using std::ofstream;
+#include "binData.hpp" 
 
 void transformPoint(Point &point, double &xAxisRotationAngle, 
 	double &cameraHeightFromGround){
@@ -95,14 +96,11 @@ void filterPoints(vector<Point>&points, double & heightClearance){
 //Filter, transform, and segment the 3D points into a 2D vector 
 void segmentIntoObjects(vector<Point>& threeD, 
 	double &binSize, vector<vector<Point>>&maximums, 
-	vector<vector<vector<double>>>&bins, double & kinectMinX, 
+	vector<vector<binData>>&bins, double & kinectMinX, 
 	double & kinectMinZ, double & xAxisRotationAngle, 
 	double & cameraHeightFromGround, double &heightClearance){
 
-//	ofstream binsByIndexFile("binsByIndex.txt"); 
-	// ofstream filterPoints("filterPoints.csv");
-	// filterPoints << "X,Y,Z,W" << endl;  
-	for(unsigned int i=2; i<threeD.size(); i++){
+	for(unsigned int i=0; i<threeD.size(); i++){
 
 		//If point has a negative Z it is invalid. The kinect 
 		//cannot see behind itself. 
@@ -119,30 +117,22 @@ void segmentIntoObjects(vector<Point>& threeD,
 		//place point into bins 
 		int z = (threeD[i].z - kinectMinZ)/binSize; 
 
-		//add point to bin  
-
-	//	binsByIndexFile << "x: " << index << "z: " << z << " : " << endl; 
-	//	threeD[i].draw(binsByIndexFile); 
-
-		// filterPoints << threeD[i].x << "," << threeD[i].y << ",";
-		// filterPoints << threeD[i].z << "," << endl; 
-
-	//	threeD[i].draw(cout); 
-	//	bins[index][z][bins[index][z].size() -1 ].draw(binFile); 
+		//add point to bin 
+		bins[index][z].data.push_back(threeD[i]); 
 
 		//Bins Mean Trimmed Variables 
 		//SUM 
-		bins[index][z][0] += threeD[i].y; 
+		bins[index][z].sum += threeD[i].y; 
 		//Maximum 
-		if( bins[index][z][1] < threeD[i].y) 
-			bins[index][z][1] = threeD[i].y; 
+		if( bins[index][z].maximum < threeD[i].y) 
+			bins[index][z].maximum = threeD[i].y; 
 		//Minimum 
-		if( bins[index][z][2] > threeD[i].y )
-			bins[index][z][2] = threeD[i].y; 
+		if( bins[index][z].minimum > threeD[i].y )
+			bins[index][z].minimum = threeD[i].y; 
 		//Total points 
-		bins[index][z][3]++; 
+		bins[index][z].totalPoints++; 
 		//Squared Sum 
-		bins[index][z][4] += threeD[i].y * threeD[i].y; 
+		bins[index][z].squaredSum += bins[index][z].sum * bins[index][z].sum; 
 		//Variance so far 
 		/* 
 	    //Get Variance without storing all data until end and looping through
@@ -159,43 +149,18 @@ void segmentIntoObjects(vector<Point>& threeD,
 	    This is my Standard Deviation!
 	    ///From: https://www.statisticshowto.datasciencecentral.com/calculators/variance-and-standard-deviation-calculator/
 	    */ 
-		double sumSquared = bins[index][z][0] * bins[index][z][0]; 
-		bins[index][z][5] = (bins[index][z][4] - (sumSquared / bins[index][z][3])) / (bins[index][z][3] - 1); 
-		double trimmedMean = (bins[index][z][0] - bins[index][z][1] - bins[index][z][2]) / (bins[index][z][3] - 2); 
-		//Check if this point's Y is a new max 
-		/*
-		if(maximums[index][z].y < threeD[i].y){
-			maximums[index][z] = threeD[i]; 
-		}
-		else if(maximums[index][z].y == 0){
-			maximums[index][z] = threeD[i];
-		}*/
+	    bins[index][z].trimmedMean = (bins[index][z].sum - bins[index][z].maximum - bins[index][z].minimum) / (bins[index][z].totalPoints - 2); 
+		double trimmedMean = bins[index][z].trimmedMean; 
+//	    **how many points are found in a bin on average? 
+	//	double variance = bins[index][z][5] = (bins[index][z][4] - (sumSquared / bins[index][z][3])) / (bins[index][z][3] - 1); 
+	//	double stdDeviation = sqrt(variance); 
 
 		threeD[i].y = trimmedMean; 
 		if(std::isinf(trimmedMean) || std::isnan(trimmedMean))
-			threeD[i].y = bins[index][z][1]; 
+			threeD[i].y = bins[index][z].maximum; 
 		maximums[index][z] = threeD[i];
 	}
-//filterPoints.close(); 
-//	binsByIndexFile.close(); 
 
-	// ofstream binFile("binnedPoints.txt"); 
- //      binFile << "Size: " << bins.size() << endl; 
- //      binFile << "J: " << bins[0].size() << endl; 
- //      binFile << "K: " << bins[0][0].size() << endl; 
- //      for(int i=0; i<bins.size(); i++){
- //        binFile << "[ " << endl; 
- //        for(int j=0; j<bins[i].size(); j++){
- //          binFile << "[ " << endl; 
- //          for(int k=0; k<bins[i][j].size(); k++){
- //            bins[i][j][k].draw(binFile);
- //          }
- //          binFile << "]" << endl; 
- //        }
- //        binFile << "]" << endl; 
- //      }
- //    binFile.close(); 
- 
 }
 
 
